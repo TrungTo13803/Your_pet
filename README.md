@@ -2,9 +2,9 @@
 
 Dự án app quản lý thú cưng.
 - Thành viên:
-    Hoàng Minh Tú
-    Đoàn Quốc Trung (Trung Tô)
-    Bùi Mạnh Tú
+    - Hoàng Minh Tú
+    - Đoàn Quốc Trung (Trung Tô)
+    - Bùi Mạnh Tú
 ## Getting Started
 
 Dự án này là bài tập lớn của lớp kỹ thuật phần mềm.
