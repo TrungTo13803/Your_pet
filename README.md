@@ -3,7 +3,7 @@
 Dự án app quản lý thú cưng.
 - Thành viên:
     - Hoàng Minh Tú
-    - Đoàn Quốc Trung (Trung Tô)
+    - Đoàn Quốc Trung
     - Bùi Mạnh Tú
     
 ## Getting Started
