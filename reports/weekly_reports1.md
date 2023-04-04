@@ -1,12 +1,12 @@
 # Báo cáo tiến độ tuần 
 Project 7 (yourPet)
-+ Nhóm Quyết định thay đổi Tech stack. (Cũ: Flutter, mySQL)
++ Thay đổi Tech stack: (Cũ: Flutter, mySQL)
     _ Front-end:
-        Flutter: Để phát triển ứng dụng di động cho nhiều nền tẳng và thiết kế UI.
+        - Flutter: Để phát triển ứng dụng di động cho nhiều nền tẳng và thiết kế UI.
     _ Back-end:
-        Firebase: Quản lý và lưu trữ dữ liệu người dùng.
-        Firebase Authentication: Xác thực người dùng và bảo mật dữ liệu.
-        Firebase Cloud Messaging: Gửi thông báo đến người dùng.
+        - Firebase: Quản lý và lưu trữ dữ liệu người dùng.
+        - Firebase Authentication: Xác thực người dùng và bảo mật dữ liệu.
+        - Firebase Cloud Messaging: Gửi thông báo đến người dùng.
 + Tiến độ tuần vừa qua:
     - Đã hoàn thiện được main page.
 + Dự kiến tuần tiếp theo:
