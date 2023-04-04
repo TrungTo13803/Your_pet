@@ -30,4 +30,4 @@ Dự án này là bài tập lớn của lớp kỹ thuật phần mềm.
     - Người dùng cũng có thể lên lịch hẹn giờ nhắc nhở cho thú cưng ăn uống, nghỉ ngơi. 
     - Đề xuất một vài gợi ý về cách chăm sóc sức khỏe cho thú cưng, fun facts, cách huấn luyện, ... 
 
-- Tech stack: Xamarin vs FireBase.
+- Tech stack: Flutter, FireBase.
