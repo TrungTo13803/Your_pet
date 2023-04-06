@@ -1,4 +1,4 @@
-package com.example.prj_your_pet
+package com.example.demo
 
 import io.flutter.embedding.android.FlutterActivity
 
