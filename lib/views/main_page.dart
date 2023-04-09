@@ -1,9 +1,11 @@
+import 'package:demo/views/account_page.dart';
 import 'package:flutter/material.dart';
+import 'package:demo/views/notifications_page.dart';
+
 //import 'package:flutter/gestures.dart';
 //import 'dart:ui';
 //import 'package:google_fonts/google_fonts.dart';
 //import '/util.dart';
-import 'package:demo/views/notifications_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -28,7 +30,12 @@ class MainPage extends StatelessWidget {
             size: 21,
             color: Color(0xff212121),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AccountPage()),
+            );
+          },
         ),
 
         actions: [
@@ -42,7 +49,7 @@ class MainPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NotificationsPage()),
+                MaterialPageRoute(builder: (context) => const NotificationsPage()),
               );
             },
           )
