@@ -7,12 +7,14 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Account",
-          style: TextStyle(
-              color: Color(0xff212121),
-              fontSize: 16,
-              fontWeight: FontWeight.w500
-          )),
+        title: Container(
+          //margin: const EdgeInsets.fromLTRB(90, 0, 0, 0),
+          child: const Text("Account",
+              style: TextStyle(
+                  color: Color(0xff212121),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500
+              )),),
 
       leading: IconButton(
           onPressed: () {

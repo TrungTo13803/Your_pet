@@ -7,12 +7,14 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notifications",
-            style: TextStyle(
-              color: Color(0xff212121),
-              fontSize: 16,
-              fontWeight: FontWeight.w500
-            )),
+        title: const Flexible(
+          //margin: const EdgeInsets.fromLTRB(75, 0, 0, 0),
+          child: Text("Notifications",
+              style: TextStyle(
+                  color: Color(0xff212121),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500
+              )),),
 
         leading: IconButton(
           onPressed: () {

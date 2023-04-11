@@ -12,496 +12,208 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xffffe15d),
-        title: Container(
-          margin: const EdgeInsets.fromLTRB(110, 0, 0, 0),
-          child: const Icon(
-              Icons.pets,
-              size: 21,
-              color: Color(0xff212121)
-          ),
-        ),
+        backgroundColor: const Color(0xfff5f5f7),
+        appBar: AppBar(
+          backgroundColor: const Color(0xffffe15d),
 
-        leading: IconButton(
-          icon: const Icon(
-            Icons.account_circle,
-            size: 21,
-            color: Color(0xff212121),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AccountPage()),
-            );
-          },
-        ),
+          leading: Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AccountPage()),
+                    );
+                  },
 
-        actions: [
-          IconButton(
-            padding:const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            icon : const Icon(
-              Icons.notifications,
-              size: 21,
-              color: Color(0xff212121),
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NotificationsPage()),
-              );
-            },
-          )
-        ],
-      ),
-
-      body: Container(
-        margin: const EdgeInsets.fromLTRB(20, 24, 20, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                margin: const EdgeInsets.fromLTRB(0, 10, 0, 24),
-                child: const Text(
-                    'Welcome back 👋',
-                    style:
-                    TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff212121)
-                    )
-                )
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    child: const Text(
-                        'Your pets',
-                        style:
-                        TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff212121)
-                        )
-                    )
-                ),
-
-                Container(
-                  child: TextButton(
-                    style: TextButton.styleFrom(textStyle: const TextStyle(
-                        fontSize: 18,
-                        decoration: TextDecoration.underline
-                    )),
-                    child: const Text('See all'),
-                    onPressed: () {},
-                  ),
-                )
-              ],
-            ),
-
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget> [
-                      Container(
-                          width: 155,
-                          height: 145,
-                          margin: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: const Color(0xffFF8B8B),
-                              boxShadow:const [
-                                BoxShadow(
-                                  color: Color(0x40000000),
-                                  offset: Offset(3, 4),
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
-                                )
-                              ]
-                          ),
-
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.fromLTRB(20, 10, 0 , 0),
-                                      child: const Text(
-                                        'Ben',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xff212121),
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                        margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                        child: IconButton (
-                                          icon: const Icon(
-                                            //_buttonPressed_Widget1_YourPetsList ? Icons.favorite_outline : Icons.favorite,
-                                            Icons.favorite,
-                                            size: 21,
-                                          ),
-                                          onPressed: () {
-                                            //setState(() {
-                                              //_buttonPressed_Widget1_YourPetsList = !_buttonPressed_Widget1_YourPetsList;
-                                            //});
-                                          },
-                                        )
-                                    )
-                                  ]
-                              ),
-
-                              Container(
-                                  margin: const EdgeInsets.fromLTRB(20, 5, 0 , 5),
-                                  child: const Text(
-                                      'Dog',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          color: Color(0xff212121)
-                                      )
-                                  )
-                              ),
-
-                              Container(
-                                  width: 70,
-                                  height: 32.5,
-                                  margin: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF0051FF),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: TextButton(
-                                    child: const Text(
-                                        'Edit',
-                                        style: TextStyle(
-                                          color: Color(0xffffffff),
-                                        )
-                                    ),
-                                    onPressed: () {},
-                                  )
-                              )
-                            ],
-                          )
-                      ),
-
-                      Container(
-                          width: 155,
-                          height: 145,
-                          margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: const Color(0xff99FFE0),
-                              boxShadow:const [
-                                BoxShadow(
-                                  color: Color(0x40000000),
-                                  offset: Offset(3, 4),
-                                  spreadRadius: 1,
-                                  blurRadius: 10,
-                                )
-                              ]
-                          ),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.fromLTRB(20, 10, 0 , 0),
-                                        child: const Text(
-                                          'Tom',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xff212121),
-                                          ),
-                                        ),
-                                      ),
-
-                                      Container(
-                                          margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              //_buttonPressed_Widget2_YourPetsList ? Icons.favorite_outline : Icons.favorite,
-                                              Icons.favorite,
-                                              size: 21,
-                                            ),
-                                            onPressed: () {}
-
-                                              //setState(() {
-                                                //_buttonPressed_Widget2_YourPetsList = !_buttonPressed_Widget2_YourPetsList;
-
-                                            //},
-                                          )
-                                      )
-                                    ]
-                                ),
-
-                                Container(
-                                    margin: const EdgeInsets.fromLTRB(20, 5, 0 , 5),
-                                    child: const Text(
-                                        'Cat',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: Color(0xff212121)
-                                        )
-                                    )
-                                ),
-
-                                Container(
-                                    width: 70,
-                                    height: 32.5,
-                                    margin: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF0051FF),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: TextButton(
-                                      child: const Text(
-                                          'Edit',
-                                          style: TextStyle(
-                                            color: Color(0xffffffff),
-                                          )
-                                      ),
-                                      onPressed: () {},
-                                    )
-                                )
-                              ]
-                          )
-                      ),
-                    ],
+                  icon: const Icon(
+                    Icons.account_circle,
+                    size: 21,
+                    color: Color(0xff212121),
                   )
-                ]
-            ),
-
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 15, 0, 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      child: const Text(
-                          'Ongoing events',
-                          style:
-                          TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff212121)
-                          )
-                      )
-                  ),
-
-                  Container(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          textStyle: const TextStyle(
-                              fontSize: 18,
-                              decoration: TextDecoration.underline
-                          )
-                      ),
-                      child: const Text('See all'),
-                      onPressed: () {},
-                    ),
-                  )
-                ],
               ),
             ),
+          ),
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    width: 370,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color:  const Color(0xffffffff),
-                      boxShadow: const [
-                        BoxShadow(
-                          offset: Offset(3, 4),
-                          color: Color(0x40000000),
-                          spreadRadius: 1,
-                          blurRadius: 10,
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(25),
+          actions: [
+            Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      //padding:const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      icon: const Icon(
+                        Icons.notifications,
+                        size: 21,
+                        color: Color(0xff212121),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NotificationsPage()),
+                        );
+                      },
                     ),
-
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                              child: const Text(
-                                  'Giving pills to Ben',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff212121),
-                                  )
-                              ),
-                            ),
-
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                              child: const Text(
-                                  '9:00 AM, Today',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff212121),
-                                  )
-                              ),
-                            )
-                          ],
-                        ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                              child: const Text(
-                                  'Ben',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff212121),
-                                  )
-                              ),
-                            ),
-
-                            Container(
-                                width: 70,
-                                height: 35,
-                                margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF0051FF),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: TextButton(
-                                  child: const Text(
-                                      'Edit',
-                                      style: TextStyle(
-                                        color: Color(0xffffffff),
-                                      )
-                                  ),
-                                  onPressed: () {},
-                                )
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                ),
-
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    width: 370,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color:  const Color(0xffffffff),
-                      boxShadow: const [
-                        BoxShadow(
-                          offset: Offset(3, 4),
-                          color: Color(0x40000000),
-                          spreadRadius: 1,
-                          blurRadius: 10,
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: const Text(
-                                    'Bathe Ben',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xff212121),
-                                    )
-                                ),
-                              ),
-
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                child: const Text(
-                                    '10:00 AM, Today',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff212121),
-                                    )
-                                ),
-                              )
-                            ],
-                          ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                child: const Text(
-                                    'Ben',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff212121),
-                                    )
-                                ),
-                              ),
-
-                              Container(
-                                  width: 70,
-                                  height: 35,
-                                  margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF0051FF),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: TextButton(
-                                    child: const Text(
-                                        'Edit',
-                                        style: TextStyle(
-                                          color: Color(0xffffffff),
-                                        )
-                                    ),
-                                    onPressed: () {},
-                                  )
-                              )
-                            ],
-                          )
-                        ]
-                    )
+                  ],
                 )
-              ],
             )
           ],
         ),
-      ),
+
+        body: SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children:  [
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      _WelcomeBackLabel(),
+                      _WelcomeBackSubLabel(),
+                    ]
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          _YourPetsSection(),
+                          _SeeAllButton(),
+                        ],
+                      ),
+
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [   
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              height: MediaQuery.of(context).size.height * 0.18,
+                              child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: const Color(0xffFF8B8B),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0x40000000),
+                                          offset: Offset(3, 4),
+                                          spreadRadius: 1,
+                                          blurRadius: 10,
+                                        )
+                                      ]
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: const [
+                                          _YourPetsLabel(),
+                                          _YourPetsSubLabel(),
+                                          _EditButton()
+                                        ],
+                                      ),
+
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: const[
+                                          _YourPetsFavouriteIcon(),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                              ),
+                            ),
+
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              height: MediaQuery.of(context).size.height * 0.18,
+                              child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: const Color(0xffFF8B8B),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0x40000000),
+                                          offset: Offset(3, 4),
+                                          spreadRadius: 1,
+                                          blurRadius: 10,
+                                        )
+                                      ]
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: const [
+                                          _YourPetsLabel(),
+                                          _YourPetsSubLabel(),
+                                          _EditButton()
+                                        ],
+                                      ),
+
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: const[
+                                          _YourPetsFavouriteIcon(),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                              ),
+                            )
+                          ],
+                        )
+                      )
+                    ],
+                  )
+                ),
+
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          _OngoingEventsSection(),
+                          _SeeAllButton(),
+                        ],
+                      ),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            _OngoingEventsBox(),
+                            _OngoingEventsBox2()
+                          ],
+                        )
+                      )
+                    ]
+                  )
+                ),
+              ],
+            )
+        ),
 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem> [
@@ -542,11 +254,354 @@ class MainPage extends StatelessWidget {
         unselectedFontSize: 12,
         unselectedItemColor: const Color(0xffd9d9d9),
       ),
+    );
 
+  }
+}
+class _OngoingEventsBox2 extends StatelessWidget {
+  const _OngoingEventsBox2();
 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+      child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.15,
+          child: DecoratedBox(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: const Color(0xfff5f5f7),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x40000000),
+                      offset: Offset(3, 4),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                    )
+                  ]
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: FittedBox(
+                              child: Text("Giving foods",
+                                  style: TextStyle(
+                                      color: Color(0xff212121),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500
+                                  )
+                              )
+                          )
+                      ),
+
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(8, 0, 8, 15),
+                          child: FittedBox(
+                              child: Text("Ben",
+                                  style: TextStyle(
+                                    color: Color(0xff212121),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  )
+                              )
+                          )
+                      )
+                    ],
+                  ),
+
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: FittedBox(
+                              child: Text("9:00 AM, Today",
+                                  style: TextStyle(
+                                    color: Color(0xff212121),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  )
+                              )
+                          )
+                      ),
+
+                      _EditButton()
+                    ],
+                  )
+                ],
+              )
+          )
+      ),
     );
   }
 }
+
+class _OngoingEventsBox extends StatelessWidget {
+  const _OngoingEventsBox();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.15,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xfff5f5f7),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x40000000),
+                  offset: Offset(3, 4),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                )
+              ]
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Text("Giving pills",
+                        style: TextStyle(
+                          color: Color(0xff212121),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500
+                        )
+                      )
+                    )
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(8, 0, 8, 15),
+                    child: FittedBox(
+                      child: Text("Ben",
+                        style: TextStyle(
+                          color: Color(0xff212121),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        )
+                      )
+                    )
+                  )
+                ],
+              ),
+
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: FittedBox(
+                          child: Text("8:00 AM, Today",
+                              style: TextStyle(
+                                color: Color(0xff212121),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              )
+                          )
+                      )
+                  ),
+
+                  _EditButton()
+                ],
+              )
+            ],
+          )
+        )
+      ),
+    );
+  }
+}
+
+class _OngoingEventsSection extends StatelessWidget {
+  const _OngoingEventsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: FittedBox(
+        child: Text('Ongoing events',
+            style: TextStyle(
+                color: Color(0xff212121),
+                fontSize: 18,
+                fontWeight: FontWeight.w500
+            )))
+    );
+  }
+}
+
+class _YourPetsSection extends StatelessWidget {
+  const _YourPetsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: FittedBox(
+        child: Text('Your pets',
+          style: TextStyle(
+            color: Color(0xff212121),
+            fontSize: 18,
+            fontWeight: FontWeight.w500
+          )))
+    );
+  }
+}
+
+class _SeeAllButton extends StatelessWidget {
+  const _SeeAllButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 2.5, 8, 0),
+      child: FittedBox(
+        child: TextButton(
+          onPressed: () {},
+          child: const Text('See all',
+              style: TextStyle(
+                fontSize: 14,
+                decoration: TextDecoration.underline,
+          )),),),
+    );
+  }
+}
+
+class _YourPetsFavouriteIcon extends StatelessWidget {
+  const _YourPetsFavouriteIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+        child: IconButton(
+            onPressed: () {},
+            padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+            icon: const Icon(
+              Icons.favorite,
+              size: 21,
+              color: Color(0xff212121),
+            ))
+    );
+  }
+}
+
+class _YourPetsLabel extends StatelessWidget {
+  const _YourPetsLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(13, 5, 8, 0),
+      child: FittedBox(
+        child: Text("Ben",
+          style: TextStyle(
+            color: Color(0xff212121),
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          )))
+    );
+  }
+}
+
+class _YourPetsSubLabel extends StatelessWidget {
+  const _YourPetsSubLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+       padding: EdgeInsets.fromLTRB(13, 5, 8, 10),
+       child: FittedBox(
+           child: Text("Dog",
+               style: TextStyle(
+                 color: Color(0xff212121),
+                 fontSize: 14,
+                 fontWeight: FontWeight.w400,
+               )))
+                                        );
+  }
+}
+
+class _EditButton extends StatelessWidget {
+  const _EditButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 10, 0, 8),
+      child: Expanded(
+        child: MaterialButton(
+          onPressed: () {},
+          elevation: 0,
+          color: const Color(0xFF0051FF),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: const Center(
+            child: Text("Edit",
+                style: TextStyle(
+                  color: Color(0xfff5f5f7),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                )
+            )
+          ),
+        )
+      )
+    );
+  }
+}
+
+class _WelcomeBackSubLabel extends StatelessWidget {
+  const _WelcomeBackSubLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+      child: FittedBox(
+        child: Text("Let's see how are your pets doing!",
+          style: TextStyle(
+            color: Color.fromARGB(255, 80, 80, 80),
+            fontSize: 13,
+            fontWeight: FontWeight.w300
+          ),),),
+    );
+  }
+}
+
+class _WelcomeBackLabel extends StatelessWidget {
+  const _WelcomeBackLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: FittedBox(
+        child: Text('Welcome back 👋',
+          style: TextStyle(
+            color: Color(0xff212121),
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+        )))
+    );
+  }
+}
+
+
 
 
 
