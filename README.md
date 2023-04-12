@@ -2,7 +2,7 @@
 
 Dự án app quản lý thú cưng.
 - Thành viên:
-    - Hoàng Minh Tú
+    - Hoàng Minh Tú (Captain)
     - Đoàn Quốc Trung
     - Bùi Mạnh Tú
     
