@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:demo/firebase_options.dart';
 
+// Login view 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -11,22 +12,6 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-
-// Login view 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -112,11 +97,21 @@ class _LoginViewPageUI extends StatelessWidget {
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
-              final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: email, 
-                password: password
-              );
-              print(userCredential);
+              try {
+                final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: email, 
+                  password: password
+                );
+                print(userCredential);
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'weak-password') {
+                  print('Weak password');
+                } else if (e.code == 'email-already-in-use') {
+                  print('Email already in use');
+                } else if (e.code == 'invalid-email'){
+                  print('Invalid email');
+                }
+              }
             },
             style: const ButtonStyle( 
             ),
