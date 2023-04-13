@@ -1,10 +1,9 @@
 # PROJECT YOURPET
 
-Dự án app quản lý thú cưng.
-- Thành viên:
-    - Hoàng Minh Tú
-    - Đoàn Quốc Trung
-    - Bùi Mạnh Tú
+## Members:
+   - Hoàng Minh Tú (Captain)
+   - Đoàn Quốc Trung
+   - Bùi Mạnh Tú
     
 ## Getting Started
 
