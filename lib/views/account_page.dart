@@ -36,34 +36,18 @@ class AccountPage extends StatelessWidget {
         ),
       ),  
       
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      
-                    ),
-                    
-                  )
-                ],
+      body: Column(
+        children: [
+          Row(
+            children: [
+              MaterialButton(
+                onPressed: () {},
+                child: const Text('Logout',)
               )
-            )
-                        
-                    
-                    
-                  
-                  
-                
-                
-              
-          
-          ],
-        )
-      )
+            ],
+          )        
+        ],
+      ) 
     );
   }
 }

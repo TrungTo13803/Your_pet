@@ -266,7 +266,7 @@ class _OngoingEventsBox2 extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
       child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.15,
+          height: MediaQuery.of(context).size.height * 0.13,
           child: DecoratedBox(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
@@ -350,7 +350,7 @@ class _OngoingEventsBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.15,
+        height: MediaQuery.of(context).size.height * 0.13,
         child: DecoratedBox(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
