@@ -1,70 +1,68 @@
+import 'package:demo/constrants/routes.dart';
 import 'package:demo/views/account_page.dart';
 import 'package:flutter/material.dart';
 import 'package:demo/views/notifications_page.dart';
+import 'dart:developer' as devtools show log;
 
-//import 'package:flutter/gestures.dart';
-//import 'dart:ui';
-//import 'package:google_fonts/google_fonts.dart';
-//import '/util.dart';
-
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MainPage> createState() => _MainPageState();
+}
 
+class _MainPageState extends State<MainPage> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color(0xfff5f5f7),
         appBar: AppBar(
           backgroundColor: const Color(0xffffe15d),
 
-          leading: Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: IconButton(
+          leading: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  accountRoute,   
+                  (route) => false
+                );
+              },
+
+            icon: const Icon(
+              Icons.account_circle,
+              size: 21,
+              color: Color(0xff212121),
+            )
+          ),
+        ),
+
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                //padding:const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  icon: const Icon(
+                    Icons.notifications,
+                    size: 21,
+                    color: Color(0xff212121),
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AccountPage()),
-                    );
-                  },
-
-                  icon: const Icon(
-                    Icons.account_circle,
-                    size: 21,
-                    color: Color(0xff212121),
-                  )
-              ),
-            ),
-          ),
-
-          actions: [
-            Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      //padding:const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      icon: const Icon(
-                        Icons.notifications,
-                        size: 21,
-                        color: Color(0xff212121),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NotificationsPage()),
-                        );
-                      },
-                    ),
-                  ],
-                )
-            )
-          ],
-        ),
+                        builder: (context) => const NotificationsPage()),
+                      );
+                    },
+                  ),
+                ],
+              )
+          )
+        ],
+      ),
 
         body: SafeArea(
             child: Column(
@@ -255,7 +253,6 @@ class MainPage extends StatelessWidget {
         unselectedItemColor: const Color(0xffd9d9d9),
       ),
     );
-
   }
 }
 class _OngoingEventsBox2 extends StatelessWidget {

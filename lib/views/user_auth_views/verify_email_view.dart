@@ -1,3 +1,4 @@
+import 'package:demo/constrants/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pushNamedAndRemoveUntil(
-              '/login/',
+              loginRoute,
               (route) => false);
           },
           icon: const Icon(
@@ -30,9 +31,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: const Text('Verify your email address',
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('Verify your email address',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:demo/firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 // Login view 
 class UserAuthView extends StatelessWidget {
@@ -22,7 +23,7 @@ class UserAuthView extends StatelessWidget {
               final user = FirebaseAuth.instance.currentUser;
               if (user != null) {
                 if (user.emailVerified) {
-                  print("user is verified");
+                  devtools.log("user is verified");
 
                 } else {
                   return const VerifyEmailView();
