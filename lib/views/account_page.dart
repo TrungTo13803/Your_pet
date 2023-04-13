@@ -7,16 +7,25 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          //margin: const EdgeInsets.fromLTRB(90, 0, 0, 0),
-          child: const Text("Account",
-              style: TextStyle(
-                  color: Color(0xff212121),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500
-              )),),
+        backgroundColor: const Color(0xffffe15d),
+        iconTheme: const IconThemeData(
+          color: Color(0xff212121)
+        ),
 
-      leading: IconButton(
+        title: const Padding(
+          padding: EdgeInsets.fromLTRB(8, 5, 8, 10),
+          child: FittedBox(
+            child: Text("Account",
+              style: TextStyle(            
+                color: Color(0xff212121),
+                fontSize: 18,
+                fontWeight: FontWeight.w500
+              )
+            )
+          )
+        ),
+
+        leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -24,14 +33,37 @@ class AccountPage extends StatelessWidget {
             Icons.arrow_back_ios_new,
             size: 21,
           )
-      ),
-
-      backgroundColor: const Color(0xffffe15d),
-      iconTheme: const IconThemeData(
-          color: Color(0xff212121)
-      ),
-    ),
-
+        ),
+      ),  
+      
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      
+                    ),
+                    
+                  )
+                ],
+              )
+            )
+                        
+                    
+                    
+                  
+                  
+                
+                
+              
+          
+          ],
+        )
+      )
     );
   }
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "441846428818",
+    "project_id": "se-n13-your-pets",
+    "storage_bucket": "se-n13-your-pets.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441846428818:android:35dbecd643aa1efdd5e24b",
+        "android_client_info": {
+          "package_name": "com.sen13.yourpets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441846428818-okp3c2oubl8kvrqji7a5ann8kpf48thk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIvQ1lMpYy8vjqcYtX4ljcYBndBcMY7ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441846428818-okp3c2oubl8kvrqji7a5ann8kpf48thk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
