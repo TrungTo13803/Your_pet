@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:demo/firebase_options.dart';
-import 'dart:developer' as devtools show log;
 
 // Login view
 class UserAuthView extends StatelessWidget {
