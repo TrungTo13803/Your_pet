@@ -7,10 +7,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:demo/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
-// Login view 
+// Login view
 class UserAuthView extends StatelessWidget {
   const UserAuthView({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -23,23 +23,16 @@ class UserAuthView extends StatelessWidget {
               final user = FirebaseAuth.instance.currentUser;
               if (user != null) {
                 if (user.emailVerified) {
-                  devtools.log("user is verified");
-
+                  return const MainPage();
                 } else {
                   return const VerifyEmailView();
                 }
               } else {
                 return const LoginView();
               }
-              return const MainPage();    
             default:
               return const CircularProgressIndicator();
           }
-        }
-      );
+        });
   }
-  
 }
-
-
-

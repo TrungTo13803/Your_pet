@@ -1,8 +1,9 @@
+import 'package:demo/constrants/routes.dart';
+import 'package:demo/views/user_auth_views/show_error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer' as devtools show log;
 
-// Login view 
+// Register view
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -31,13 +32,33 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
+      backgroundColor: Color(0xfff5f5f7),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              'Register new yourPets account',
+              style: TextStyle(
+                color: Color(0xff212121),
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'New journey along with your pets!',
+              style: TextStyle(
+                color: Color(0xff212121),
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextField(
@@ -45,12 +66,19 @@ class _RegisterViewState extends State<RegisterView> {
               enableSuggestions: false,
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: 'Email'
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xff2271ff)),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                labelText: 'Email',
               ),
-            ),  
+            ),
           ),
-              
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextField(
@@ -58,51 +86,63 @@ class _RegisterViewState extends State<RegisterView> {
               obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Password'
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xff2271ff)),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                labelText: 'Password',
               ),
             ),
           ),
-        
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+            child: OutlinedButton(
               onPressed: () async {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: email, 
-                    password: password
-                  );
-                  devtools.log(userCredential.toString());
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: email, password: password);
+
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+                  Navigator.of(context).pushNamed(verifyEmailRoute);
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
-                    devtools.log('Weak password');
+                    await showErrorDialogRegister(context, 'Weak password');
                   } else if (e.code == 'email-already-in-use') {
-                    devtools.log('Email already in use');
-                  } else if (e.code == 'invalid-email'){
-                    devtools.log('Invalid email');
+                    await showErrorDialogRegister(
+                        context, 'Email already in use');
+                  } else if (e.code == 'invalid-email') {
+                    await showErrorDialogRegister(context, 'Invalid email');
+                  } else {
+                    await showErrorDialogRegister(context, 'Error: ${e.code}');
                   }
+                } catch (e) {
+                  await showErrorDialogRegister(context, e.toString());
                 }
               },
-              style: const ButtonStyle( 
+              child: const Text(
+                'Register',
               ),
-              child: const Text('Register'),
             ),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                '/login/',
-                (route) => false
-              );
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(loginRoute, (route) => false);
             },
-            child: const Text('Already have an account? Login'),
+            child: const Text(
+              'Already have an account? Login',
+            ),
           )
         ],
       ),
     );
   }
 }
-

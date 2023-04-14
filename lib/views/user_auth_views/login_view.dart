@@ -1,9 +1,10 @@
 import 'package:demo/constrants/routes.dart';
+import 'package:demo/views/user_auth_views/show_error_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer' as devtools show log;
 
-// Login view 
+// Login view
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -32,84 +33,127 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Welcome to yourPets!'),
-      ),
-
+      backgroundColor: const Color(0xfff5f5f7),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        // crossAxisAlignment: CrossAxisAlignment.center,
+        // crossAxisAlignment: CrossAxisAlignment.,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: FittedBox(
+                      child: Text(
+                        'Welcome to yourPets!',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: FittedBox(
+                        child: Text(
+                      'Your personal pets management app 😻',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )),
+                  )
+                ],
+              )
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: TextField(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: TextFormField(
               controller: _email,
               enableSuggestions: false,
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: 'Email'
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xff2271ff)),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                labelText: 'Email',
               ),
-            ),  
+            ),
           ),
-              
           Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: TextField(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: TextFormField(
               controller: _password,
               obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Password'
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(10.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xff2271ff)),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                labelText: 'Password',
               ),
             ),
           ),
-        
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
+            child: OutlinedButton(
               onPressed: () async {
                 final email = _email.text;
                 final password = _password.text;
                 try {
                   await FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: email, 
-                    password: password
-                  );
-                  Navigator.of(context).pushNamedAndRemoveUntil('/home/', (route) => false);
-                  // devtools.log(userCredential.toString());
-                } on FirebaseAuthException catch(e) {
+                      email: email, password: password);
+                  final user = FirebaseAuth.instance.currentUser;
+
+                  if (user?.emailVerified ?? false) {
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil(homeRoute, (route) => false);
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        verifyEmailRoute, (route) => false);
+                  }
+                } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
-                    devtools.log('User not found');  
+                    await showErrorDialogLogin(context, 'User not found');
                   } else if (e.code == 'wrong-password') {
-                    devtools.log('Wrong password');
-                  }  
+                    await showErrorDialogLogin(context, 'Wrong password');
+                  } else {
+                    await showErrorDialogLogin(context, 'Error: ${e.code}');
+                  }
                 }
               },
-              style: ButtonStyle(
-                
-              ),
               child: const Text('Login'),
             ),
           ),
-    
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  registerRoute,
-                  (route) => false
-                );
-              },
-              child: const Text("Don't have a account? Register here", 
-              ),
-            )
-          )
+              padding: const EdgeInsets.all(2.0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(registerRoute, (route) => false);
+                },
+                child: const Text(
+                  "Don't have a account? Register here",
+                ),
+              ))
         ],
       ),
     );
   }
 }
-
