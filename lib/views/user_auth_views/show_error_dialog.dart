@@ -5,8 +5,8 @@ Future<void> showErrorDialogLogin(BuildContext context, String message) {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
+        title: const Text('Uh oh! Something went wrong'),
+        content: Text('Please check your infomation again. $message'),
         actions: [
           OutlinedButton(
             onPressed: () {
@@ -20,7 +20,7 @@ Future<void> showErrorDialogLogin(BuildContext context, String message) {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('OK', style: TextStyle(color: Color(0xff7e57c2))),
+            child: const Text('OK', style: TextStyle(color: Color(0xff2271ff))),
           ),
         ]),
   );
@@ -30,14 +30,14 @@ Future<void> showErrorDialogRegister(BuildContext context, String message) {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
+        title: const Text('Uh oh! Something went wrong'),
+        content: Text('Please check your infomation again. $message'),
         actions: [
           OutlinedButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('OK', style: TextStyle(color: Color(0xff7e57c2))),
+            child: const Text('OK', style: TextStyle(color: Color(0xff2271ff))),
           ),
         ]),
   );
