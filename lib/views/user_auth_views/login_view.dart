@@ -3,6 +3,8 @@ import 'package:demo/services/auth/auth_exceptions.dart';
 import 'package:demo/services/auth/auth_service.dart';
 import 'package:demo/views/user_auth_views/show_error_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer' as devtools show log;
 
 // Login view
 class LoginView extends StatefulWidget {
