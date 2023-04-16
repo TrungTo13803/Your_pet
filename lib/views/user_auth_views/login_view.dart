@@ -61,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
                     padding: EdgeInsets.all(8.0),
                     child: FittedBox(
                         child: Text(
-                      'Your personal pet management app 😻',
+                      'Your personal pets management app 😻',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -73,106 +73,74 @@ class _LoginViewState extends State<LoginView> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(30, 20, 30, 10),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: TextFormField(
               controller: _email,
               enableSuggestions: false,
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(10.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color(0xff2271ff)),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  labelText: 'Email',
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                  )),
+                contentPadding: const EdgeInsets.all(10.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xff2271ff)),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                labelText: 'Email',
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: TextFormField(
               controller: _password,
               obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
               decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(10.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Color(0xff2271ff)),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  labelText: 'Password',
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                  )),
+                contentPadding: const EdgeInsets.all(10.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Color(0xff2271ff)),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                labelText: 'Password',
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                MaterialButton(
-                  elevation: 0,
-                  color: const Color(0xff2271ff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  onPressed: () async {
-                    final email = _email.text;
-                    final password = _password.text;
-                    try {
-                      AuthService.firebase().logIn(
-                        email: email,
-                        password: password,
-                      );
+            padding: const EdgeInsets.all(8.0),
+            child: OutlinedButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: email, password: password);
+                  final user = FirebaseAuth.instance.currentUser;
 
-                      final user = AuthService.firebase().currentUser;
-
-                      if (user?.isEmailVerified ?? false) {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          homeRoute,
-                          (route) => false,
-                        );
-                      } else {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          verifyEmailRoute,
-                          (route) => false,
-                        );
-                      }
-                    } on UserNotFoundAuthExceptions {
-                      await showErrorDialogLogin(
-                        context,
-                        'User not found',
-                      );
-                    } on WrongPasswordAuthExceptions {
-                      await showErrorDialogLogin(
-                        context,
-                        'Wrong password',
-                      );
-                    } on GeneralAuthExceptions {
-                      await showErrorDialogLogin(
-                        context,
-                        "You're not registered yet! Please register first",
-                      );
-                    }
-                  },
-                  child: const Text('Login',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      )),
-                ),
-              ],
+                  if (user?.emailVerified ?? false) {
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil(homeRoute, (route) => false);
+                  } else {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        verifyEmailRoute, (route) => false);
+                  }
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                    await showErrorDialogLogin(context, 'User not found');
+                  } else if (e.code == 'wrong-password') {
+                    await showErrorDialogLogin(context, 'Wrong password');
+                  } else {
+                    await showErrorDialogLogin(context, 'Error: ${e.code}');
+                  }
+                }
+              },
+              child: const Text('Login'),
             ),
           ),
           Padding(
