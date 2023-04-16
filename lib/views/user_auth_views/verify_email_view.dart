@@ -1,5 +1,5 @@
 import 'package:demo/constrants/routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demo/services/auth/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -74,8 +74,8 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                       child: FittedBox(
                         child: TextButton(
                             onPressed: () async {
-                              final user = FirebaseAuth.instance.currentUser;
-                              await user?.sendEmailVerification();
+                              await AuthService.firebase()
+                                  .sendEmailVerifications();
                             },
                             child: const Text(
                               'Resend email verification',
@@ -108,7 +108,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 FittedBox(
                     child: TextButton(
                   onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         registerRoute, (route) => false);
                   },

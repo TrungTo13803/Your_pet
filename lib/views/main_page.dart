@@ -15,51 +15,6 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff5f5f7),
-      // appBar: AppBar(
-      //   backgroundColor: const Color(0xff9575cd),
-
-      //   leading: Padding(
-      //     padding: const EdgeInsets.all(5.0),
-      //     child: IconButton(
-      //       onPressed: () {
-      //         Navigator.of(context).pushNamedAndRemoveUntil(accountRoute, (route) => false);
-      //       },
-
-      //       icon: const Icon(
-      //         Icons.account_circle,
-      //         size: 21,
-      //         color: Color(0xff212121),
-      //       )
-      //     ),
-      //   ),
-
-      //   actions: [
-      //     Padding(
-      //       padding: const EdgeInsets.all(5.0),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.end,
-      //         children: [
-      //           IconButton(
-      //           //padding:const EdgeInsets.fromLTRB(0, 0, 10, 0),
-      //             icon: const Icon(
-      //               Icons.notifications,
-      //               size: 21,
-      //               color: Color(0xff212121),
-      //             ),
-      //             onPressed: () {
-      //               Navigator.push(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                   builder: (context) => const NotificationsPage()),
-      //                 );
-      //               },
-      //             ),
-      //           ],
-      //         )
-      //     )
-      //   ],
-      // ),
-
       body: SafeArea(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -200,7 +155,6 @@ class _MainPageState extends State<MainPage> {
               ])),
         ],
       )),
-
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
