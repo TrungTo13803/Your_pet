@@ -1,255 +1,324 @@
-import 'package:demo/services/crud/crud_exceptions.dart';
-import 'package:flutter/foundation.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' show join;
+// import 'dart:async';
 
-class AppService {
-  Database? _db;
+// import 'package:demo/services/crud/crud_exceptions.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:sqflite/sqflite.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:path/path.dart' show join;
 
-  Future<DatabasePets> updatePet(
-      {required DatabasePets pet, required String name}) async {
-    final db = _getDatabaseOrThrow();
-    await getPet(id: pet.id);
+// class AppService {
+//   Database? _db;
 
-    final result = await db.update(petsTable, {
-      nameColumn: name,
-    });
+//   List<DatabasePets> _pets = [];
 
-    if (result == 0) {
-      throw CouldNotUpdatePet();
-    } else {
-      return await getPet(id: pet.id);
-    }
-  }
+//   static final AppService _shared = AppService._sharedInstance();
+//   AppService._sharedInstance() {
+//     _petsStreamController = StreamController<List<DatabasePets>>.broadcast(
+//         onListen: () => _petsStreamController.sink.add(_pets));
+//   }
 
-  Future<Iterable<DatabasePets>> getAllPets() async {
-    final db = _getDatabaseOrThrow();
-    final pets = await db.query(
-      petsTable,
-    );
+//   factory AppService() => _shared;
 
-    return pets.map((petRow) => DatabasePets.fromRow(petRow));
-  }
+//   late final StreamController<List<DatabasePets>> _petsStreamController;
 
-  Future<DatabasePets> getPet({required int id}) async {
-    final db = _getDatabaseOrThrow();
-    final pet = await db.query(
-      petsTable,
-      limit: 1,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+//   Stream<List<DatabasePets>> get allPets => _petsStreamController.stream;
 
-    if (pet.isEmpty) {
-      throw CouldNotFindPet();
-    } else {
-      return DatabasePets.fromRow(pet.first);
-    }
-  }
+//   Future<DatabaseUser> getOrCreateUser({required String email}) async {
+//     try {
+//       final user = await getUser(email: email);
+//       return user;
+//     } on CouldNotFindUser {
+//       final createdUser = await createUser(email: email);
+//       return createdUser;
+//     } catch (e) {
+//       rethrow;
+//     }
+//   }
 
-  Future<int> deleteAllPets() async {
-    final db = _getDatabaseOrThrow();
-    return await db.delete(petsTable);
-  }
+//   Future<void> _cachePets() async {
+//     final allPets = await getAllPets();
+//     _pets = allPets.toList();
+//     _petsStreamController.add(_pets);
+//   }
 
-  Future<void> deletePet({required int id}) async {
-    final db = _getDatabaseOrThrow();
-    final deletedCount = await db.delete(
-      petsTable,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+//   Future<DatabasePets> updatePet(
+//       {required DatabasePets pet, required String name}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     await getPet(id: pet.id);
 
-    if (deletedCount == 0) {
-      throw CouldNotDeletePet();
-    }
-  }
+//     final result = await db.update(petsTable, {
+//       nameColumn: name,
+//     });
 
-  Future<DatabasePets> createPet({required DatabaseUser owner}) async {
-    final db = _getDatabaseOrThrow();
-    final dbUser = await getUser(email: owner.email);
-    if (db != owner) {
-      throw CouldNotFindUser();
-    }
+//     if (result == 0) {
+//       throw CouldNotUpdatePet();
+//     } else {
+//       final updatedPet = await getPet(id: pet.id);
+//       _pets.removeWhere((pet) => pet.id == updatedPet.id);
+//       _pets.add(updatedPet);
+//       _petsStreamController.add(_pets);
+//       return updatedPet;
+//     }
+//   }
 
-    const name = '';
-    // create pet
-    final petId = await db.insert(petsTable, {
-      userIdColumn: owner.id,
-      nameColumn: name,
-    });
+//   Future<Iterable<DatabasePets>> getAllPets() async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final pets = await db.query(
+//       petsTable,
+//     );
 
-    final pet = DatabasePets(
-      id: petId,
-      userId: owner.id,
-      name: name,
-    );
+//     return pets.map((petRow) => DatabasePets.fromRow(petRow));
+//   }
 
-    return pet;
-  }
+//   Future<DatabasePets> getPet({required int id}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final pets = await db.query(
+//       petsTable,
+//       limit: 1,
+//       where: 'id = ?',
+//       whereArgs: [id],
+//     );
 
-  Future<void> deleteUser({required String email}) async {
-    final db = _getDatabaseOrThrow();
-    final deletedCount = await db.delete(
-      userTable,
-      where: 'email = ?',
-      whereArgs: [email.toLowerCase()],
-    );
+//     if (pets.isEmpty) {
+//       throw CouldNotFindPet();
+//     } else {
+//       final pet = DatabasePets.fromRow(pets.first);
+//       _pets.removeWhere((pet) => pet.id == id);
+//       _pets.add(pet);
+//       _petsStreamController.add(_pets);
+//       return pet;
+//     }
+//   }
 
-    if (deletedCount != 1) {
-      throw CouldNotDeleteUser();
-    }
-  }
+//   Future<int> deleteAllPets() async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final numberOfDeletions = await db.delete(petsTable);
+//     _pets = [];
+//     _petsStreamController.add(_pets);
+//     return numberOfDeletions;
+//   }
 
-  Future<DatabaseUser> createUser({required String email}) async {
-    final db = _getDatabaseOrThrow();
-    final result = await db.query(
-      userTable,
-      limit: 1,
-      where: 'email = ?',
-      whereArgs: [email.toLowerCase()],
-    );
+//   Future<void> deletePet({required int id}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final deletedCount = await db.delete(
+//       petsTable,
+//       where: 'id = ?',
+//       whereArgs: [id],
+//     );
 
-    if (result.isNotEmpty) {
-      throw UserAlreadyExists();
-    }
+//     if (deletedCount == 0) {
+//       throw CouldNotDeletePet();
+//     } else {
+//       _pets.removeWhere((pet) => pet.id == id);
+//       _petsStreamController.add(_pets);
+//     }
+//   }
 
-    final userId = await db.insert(userTable, {
-      emailColumn: email.toLowerCase(),
-    });
+//   Future<DatabasePets> createPet({required DatabaseUser owner}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final dbUser = await getUser(email: owner.email);
+//     if (db != owner) {
+//       throw CouldNotFindUser();
+//     }
 
-    return DatabaseUser(
-      id: userId,
-      email: email,
-    );
-  }
+//     const name = '';
+//     // create pet
+//     final petId = await db.insert(petsTable, {
+//       userIdColumn: owner.id,
+//       nameColumn: name,
+//     });
 
-  Future<DatabaseUser> getUser({required String email}) async {
-    final db = _getDatabaseOrThrow();
+//     final pet = DatabasePets(
+//       id: petId,
+//       userId: owner.id,
+//       name: name,
+//     );
 
-    final result = await db.query(
-      userTable,
-      limit: 1,
-      where: 'email = ?',
-      whereArgs: [email.toLowerCase()],
-    );
+//     _pets.add(pet);
+//     _petsStreamController.add(_pets);
 
-    if (result.isEmpty) {
-      throw CouldNotFindUser();
-    } else {
-      return DatabaseUser.fromRow(result.first);
-    }
-  }
+//     return pet;
+//   }
 
-  Database _getDatabaseOrThrow() {
-    final db = _db;
-    if (db == null) {
-      throw DatabaseIsNotOpen();
-    } else {
-      return db;
-    }
-  }
+//   Future<void> deleteUser({required String email}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final deletedCount = await db.delete(
+//       userTable,
+//       where: 'email = ?',
+//       whereArgs: [email.toLowerCase()],
+//     );
 
-  Future<void> close() async {
-    final db = _db;
-    if (db == null) {
-      throw DatabaseIsNotOpen();
-    } else {
-      await db.close();
-      _db = null;
-    }
-  }
+//     if (deletedCount != 1) {
+//       throw CouldNotDeleteUser();
+//     }
+//   }
 
-  Future<void> open() async {
-    if (_db != null) {
-      throw DatabaseAlreadyOpenException();
-    }
-    try {
-      final docsPath = await getApplicationDocumentsDirectory();
-      final dbPath = join(docsPath.path, dbName);
-      final db = await openDatabase(dbPath);
-      _db = db;
+//   Future<DatabaseUser> createUser({required String email}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
+//     final result = await db.query(
+//       userTable,
+//       limit: 1,
+//       where: 'email = ?',
+//       whereArgs: [email.toLowerCase()],
+//     );
 
-      await db.execute(createUserTable);
+//     if (result.isNotEmpty) {
+//       throw UserAlreadyExists();
+//     }
 
-      await db.execute(createPetsTable);
-    } on MissingPlatformDirectoryException {
-      throw UnableToOpenGetDocumentsDirectory();
-    }
-  }
-}
+//     final userId = await db.insert(userTable, {
+//       emailColumn: email.toLowerCase(),
+//     });
 
-@immutable
-class DatabaseUser {
-  final int id;
-  final String email;
-  const DatabaseUser({
-    required this.id,
-    required this.email,
-  });
+//     return DatabaseUser(
+//       id: userId,
+//       email: email,
+//     );
+//   }
 
-  DatabaseUser.fromRow(Map<String, Object?> map)
-      : id = map[idColumn] as int,
-        email = map[emailColumn] as String;
+//   Future<DatabaseUser> getUser({required String email}) async {
+//     await _ensureDbIsOpen();
+//     final db = _getDatabaseOrThrow();
 
-  @override
-  String toString() {
-    return 'User, id: $id, email: $email';
-  }
+//     final result = await db.query(
+//       userTable,
+//       limit: 1,
+//       where: 'email = ?',
+//       whereArgs: [email.toLowerCase()],
+//     );
 
-  @override
-  bool operator ==(covariant DatabaseUser other) {
-    return id == other.id;
-  }
+//     if (result.isEmpty) {
+//       throw CouldNotFindUser();
+//     } else {
+//       return DatabaseUser.fromRow(result.first);
+//     }
+//   }
 
-  @override
-  int get hashCode => id.hashCode;
-}
+//   Database _getDatabaseOrThrow() {
+//     final db = _db;
+//     if (db == null) {
+//       throw DatabaseIsNotOpen();
+//     } else {
+//       return db;
+//     }
+//   }
 
-class DatabasePets {
-  final int id;
-  final int userId;
-  final String name;
-  const DatabasePets({
-    required this.id,
-    required this.userId,
-    required this.name,
-  });
+//   Future<void> close() async {
+//     final db = _db;
+//     if (db == null) {
+//       throw DatabaseIsNotOpen();
+//     } else {
+//       await db.close();
+//       _db = null;
+//     }
+//   }
 
-  DatabasePets.fromRow(Map<String, Object?> map)
-      : id = map[idColumn] as int,
-        userId = map[userIdColumn] as int,
-        name = map[nameColumn] as String;
+//   Future<void> open() async {
+//     if (_db != null) {
+//       throw DatabaseAlreadyOpenException();
+//     }
+//     try {
+//       final docsPath = await getApplicationDocumentsDirectory();
+//       final dbPath = join(docsPath.path, dbName);
+//       final db = await openDatabase(dbPath);
+//       _db = db;
 
-  @override
-  String toString() => 'Pet, id: $id, userId: $userId, name: $name';
+//       await db.execute(createUserTable);
 
-  @override
-  bool operator ==(covariant DatabaseUser other) {
-    return id == other.id;
-  }
+//       await db.execute(createPetsTable);
 
-  @override
-  int get hashCode => id.hashCode;
-}
+//       await _cachePets();
+//     } on MissingPlatformDirectoryException {
+//       throw UnableToOpenGetDocumentsDirectory();
+//     }
+//   }
 
-const dbName = 'app.db';
-const petsTable = 'pets';
-const userTable = 'user';
-const idColumn = 'id';
-const emailColumn = 'email';
-const userIdColumn = 'userId';
-const nameColumn = 'name';
-const createUserTable = '''CREATE TABLE IF NOT EXISTS "user" (
-	      "id"	INTEGER NOT NULL,
-	      "email"	TEXT NOT NULL UNIQUE,
-	      PRIMARY KEY("id" AUTOINCREMENT)
-        );''';
-const createPetsTable = '''CREATE TABLE IF NOT EXISTS "pets" (
-	      "id"	INTEGER NOT NULL,
-	      "user_id"	INTEGER NOT NULL,
-	      "name"	TEXT,
-	      FOREIGN KEY("user_id") REFERENCES "user"("id"),
-	      PRIMARY KEY("id" AUTOINCREMENT)
-        );''';
+//   Future<void> _ensureDbIsOpen() async {
+//     try {
+//       await open();
+//     } on DatabaseAlreadyOpenException {}
+//   }
+// }
+
+// @immutable
+// class DatabaseUser {
+//   final int id;
+//   final String email;
+//   const DatabaseUser({
+//     required this.id,
+//     required this.email,
+//   });
+
+//   DatabaseUser.fromRow(Map<String, Object?> map)
+//       : id = map[idColumn] as int,
+//         email = map[emailColumn] as String;
+
+//   @override
+//   String toString() {
+//     return 'User, id: $id, email: $email';
+//   }
+
+//   @override
+//   bool operator ==(covariant DatabaseUser other) {
+//     return id == other.id;
+//   }
+
+//   @override
+//   int get hashCode => id.hashCode;
+// }
+
+// class DatabasePets {
+//   final int id;
+//   final int userId;
+//   final String name;
+
+//   DatabasePets({
+//     required this.id,
+//     required this.userId,
+//     required this.name,
+//   });
+
+//   DatabasePets.fromRow(Map<String, Object?> map)
+//       : id = map[idColumn] as int,
+//         userId = map[userIdColumn] as int,
+//         name = map[nameColumn] as String;
+
+//   @override
+//   String toString() => 'Pet, id: $id, userId: $userId, name: $name';
+
+//   @override
+//   bool operator ==(covariant DatabaseUser other) {
+//     return id == other.id;
+//   }
+
+//   @override
+//   int get hashCode => id.hashCode;
+// }
+
+// const dbName = 'app.db';
+// const petsTable = 'pets';
+// const userTable = 'user';
+// const idColumn = 'id';
+// const emailColumn = 'email';
+// const userIdColumn = 'userId';
+// const nameColumn = 'name';
+// const createUserTable = '''CREATE TABLE IF NOT EXISTS "user" (
+// 	      "id"	INTEGER NOT NULL,
+// 	      "email"	TEXT NOT NULL UNIQUE,
+// 	      PRIMARY KEY("id" AUTOINCREMENT)
+//         );''';
+// const createPetsTable = '''CREATE TABLE IF NOT EXISTS "pets" (
+// 	      "id"	INTEGER NOT NULL,
+// 	      "user_id"	INTEGER NOT NULL,
+// 	      "name"	TEXT,
+// 	      FOREIGN KEY("user_id") REFERENCES "user"("id"),
+// 	      PRIMARY KEY("id" AUTOINCREMENT)
+//         );''';

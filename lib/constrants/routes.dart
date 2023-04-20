@@ -5,3 +5,6 @@ const registerRoute = '/register/';
 const homeRoute = '/home/';
 const accountRoute = '/account/';
 const verifyEmailRoute = '/verifyEmail/';
+const newPetRoute = '/newPet/';
+const petsListRoute = '/petsList/';
+const createOrUpdatePetRoute = '/createOrUpdatePet/';
