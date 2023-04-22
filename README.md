@@ -1,7 +1,7 @@
 # PROJECT YOURPET
 
 ## Members:
-   - Hoàng Minh Tú (Captain)
+   - Hoàng Minh Tú
    - Đoàn Quốc Trung
    - Bùi Mạnh Tú
     
