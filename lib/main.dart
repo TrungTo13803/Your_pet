@@ -2,6 +2,7 @@ import 'package:demo/views/account_page.dart';
 import 'package:demo/views/main_page.dart';
 import 'package:demo/views/new_pet_view.dart';
 import 'package:demo/views/pets_list_view.dart';
+import 'package:demo/views/update_pet_view.dart';
 import 'package:demo/views/user_auth_views/login_view.dart';
 import 'package:demo/views/user_auth_views/user_auth_page.dart';
 import 'package:demo/views/user_auth_views/verify_email_view.dart';
@@ -37,9 +38,10 @@ class MyHome extends StatelessWidget {
         homeRoute: (context) => const MainPage(),
         accountRoute: (context) => const AccountPage(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
-        newPetRoute: (context) => const CreateOrUpdatePetView(),
+        newPetRoute: (context) => const CreatePetView(),
         petsListRoute: (context) => const AllPetsListView(),
-        createOrUpdatePetRoute: (context) => const CreateOrUpdatePetView(),
+        createPetRoute: (context) => const CreatePetView(),
+        updatePetRoute: (context) => const UpdatePetView(),
       },
     );
   }

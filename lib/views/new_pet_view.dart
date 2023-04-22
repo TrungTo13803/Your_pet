@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:demo/services/cloud/cloud_pet.dart';
 import 'package:demo/services/cloud/firebase_cloud_storage.dart';
 
-class CreateOrUpdatePetView extends StatefulWidget {
-  const CreateOrUpdatePetView({Key? key}) : super(key: key);
+class CreatePetView extends StatefulWidget {
+  const CreatePetView({Key? key}) : super(key: key);
 
   @override
-  State<CreateOrUpdatePetView> createState() => _CreateOrUpdatePetViewState();
+  State<CreatePetView> createState() => _CreatePetViewState();
 }
 
-class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
+class _CreatePetViewState extends State<CreatePetView> {
   CloudPet? _pet;
   late final FirebaseCloudStorage _appService;
   late final TextEditingController _nameEditingController;
@@ -70,7 +70,7 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
     _ageEditingController.addListener(_textEditingControllerListener);
   }
 
-  Future<CloudPet> createOrGetExistingPet(BuildContext context) async {
+  Future<CloudPet> createPet(BuildContext context) async {
     final widgetNote = context.getArgument<CloudPet>();
 
     if (widgetNote != null) {
@@ -127,10 +127,13 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
     final type = _typeEditingController.text;
     final description = _descriptionEditingController.text;
     final age = _ageEditingController.text;
-    if (pet != null && name.isNotEmpty ||
-        (type.isNotEmpty || age.isNotEmpty || description.isNotEmpty)) {
+    if (pet != null &&
+        (name.isNotEmpty ||
+            age.isNotEmpty ||
+            type.isNotEmpty ||
+            description.isNotEmpty)) {
       await _appService.updatePet(
-        documentId: pet!.documentId,
+        documentId: pet.documentId,
         petName: name,
         petType: type,
         petDescription: description,
@@ -156,7 +159,7 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
         backgroundColor: const Color(0xfff5f5f7),
         resizeToAvoidBottomInset: false,
         body: FutureBuilder(
-            future: createOrGetExistingPet(context),
+            future: createPet(context),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
@@ -164,8 +167,13 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
                   _setUpTypeEditingControllerListener();
                   _setUpDescriptionEditingControllerListener();
                   _setUpAgeEditingControllerListener();
-                  return SingleChildScrollView(
-                    child: SafeArea(
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: SingleChildScrollView(
+                        child: SafeArea(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -178,7 +186,8 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
                                     child: IconButton(
                                   onPressed: () {
                                     _deleteIfTapOnBackButton();
-                                    Navigator.of(context).pushNamed(homeRoute);
+                                    Navigator.of(context)
+                                        .pushNamed(petsListRoute);
                                   },
                                   icon: const Icon(
                                     CupertinoIcons.arrow_left,
@@ -189,23 +198,48 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
                               ),
                               const Padding(
                                 padding: EdgeInsets.fromLTRB(8, 12, 8, 8),
-                                child: Text('Add a pet',
+                                child: Text("Add a pet",
                                     style: TextStyle(
                                         color: Color(0xff212121),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500)),
                               ),
+                              Expanded(
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              8, 12, 8, 8),
+                                          child: TextButton(
+                                              onPressed: () {
+                                                _safeIfTapOnAddButton();
+                                                Navigator.of(context)
+                                                    .pushNamed(petsListRoute);
+                                              },
+                                              child: const Text('Add',
+                                                  style: TextStyle(
+                                                      color: Color(0xff0f67ca),
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w400)))),
+                                    ]),
+                              )
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                             child: SizedBox(
-                              height: 60,
+                              height: 50,
                               child: TextField(
                                 controller: _nameEditingController,
                                 keyboardType: TextInputType.name,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff212121),
+                                ),
                                 decoration: const InputDecoration(
-                                    labelText: "Name",
+                                    labelText: "How should we call him or her?",
                                     labelStyle: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
@@ -216,12 +250,17 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                             child: SizedBox(
-                              height: 60,
+                              height: 50,
                               child: TextField(
                                 controller: _typeEditingController,
                                 keyboardType: TextInputType.name,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff212121),
+                                ),
                                 decoration: const InputDecoration(
-                                    labelText: "Type",
+                                    labelText:
+                                        "What type of animal is he or she?",
                                     labelStyle: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
@@ -232,30 +271,17 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                             child: SizedBox(
-                              height: 60,
-                              child: TextField(
-                                controller: _descriptionEditingController,
-                                keyboardType: TextInputType.name,
-                                maxLength: null,
-                                decoration: const InputDecoration(
-                                    labelText: "Description",
-                                    labelStyle: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                    )),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            child: SizedBox(
-                              height: 60,
+                              height: 50,
                               child: TextField(
                                 controller: _ageEditingController,
                                 keyboardType: TextInputType.name,
                                 maxLength: null,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff212121),
+                                ),
                                 decoration: const InputDecoration(
-                                    labelText: "Age",
+                                    labelText: "How old is he or she?",
                                     labelStyle: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400,
@@ -264,24 +290,29 @@ class _CreateOrUpdatePetViewState extends State<CreateOrUpdatePetView> {
                             ),
                           ),
                           Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: MaterialButton(
-                                  elevation: 0,
-                                  color: const Color(0xFF0051FF),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  onPressed: () {
-                                    _safeIfTapOnAddButton();
-                                    Navigator.of(context)
-                                        .pushNamed(petsListRoute);
-                                  },
-                                  child: const Text('Add',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16))))
+                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            child: SizedBox(
+                              height: 50,
+                              child: TextField(
+                                controller: _descriptionEditingController,
+                                keyboardType: TextInputType.multiline,
+                                maxLength: null,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff212121),
+                                ),
+                                decoration: const InputDecoration(
+                                    labelText: "Something about your pet",
+                                    labelStyle: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w400,
+                                    )),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
+                    )),
                   );
                 default:
                   return const Center(

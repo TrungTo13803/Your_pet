@@ -7,4 +7,5 @@ const accountRoute = '/account/';
 const verifyEmailRoute = '/verifyEmail/';
 const newPetRoute = '/newPet/';
 const petsListRoute = '/petsList/';
-const createOrUpdatePetRoute = '/createOrUpdatePet/';
+const createPetRoute = '/createPet/';
+const updatePetRoute = '/updatePet/';

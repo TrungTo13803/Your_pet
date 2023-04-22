@@ -37,8 +37,7 @@ class _AllPetsListViewState extends State<AllPetsListView> {
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                homeRoute, (route) => false);
+                            Navigator.of(context).pushNamed(homeRoute);
                           },
                           icon: const Icon(
                             CupertinoIcons.arrow_left,
@@ -53,14 +52,41 @@ class _AllPetsListViewState extends State<AllPetsListView> {
                             color: Color(0xff212121),
                             fontSize: 16,
                             fontWeight: FontWeight.w600),
-                      )))
+                      ))),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(createPetRoute);
+                              },
+                              icon: const Icon(
+                                CupertinoIcons.plus,
+                                color: Color(0xFF0f67ca),
+                              ),
+                            ))
+                      ],
+                    ),
+                  )
                 ],
               ),
               Expanded(
                 child: DecoratedBox(
                   decoration: const BoxDecoration(
-                    color: Color(0xffffffff),
-                  ),
+                      borderRadius: BorderRadius.horizontal(
+                          left: Radius.circular(20),
+                          right: Radius.circular(20)),
+                      color: Color(0xffffffff),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Color(0x29000000),
+                            offset: Offset(0, 0),
+                            blurRadius: 4,
+                            spreadRadius: 1),
+                      ]),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
@@ -90,13 +116,9 @@ class _AllPetsListViewState extends State<AllPetsListView> {
                                           snapshot.data as Iterable<CloudPet>;
                                       return PetsListView(
                                         pet: allPets,
-                                        onDeletePet: (pet) async {
-                                          await _appService.deletePet(
-                                              documentId: pet.documentId);
-                                        },
                                         onTap: (pet) {
                                           Navigator.of(context).pushNamed(
-                                            createOrUpdatePetRoute,
+                                            updatePetRoute,
                                             arguments: pet,
                                           );
                                         },
@@ -128,13 +150,11 @@ typedef PetCallback = void Function(CloudPet pet);
 
 class PetsListView extends StatelessWidget {
   final Iterable<CloudPet> pet;
-  final PetCallback onDeletePet;
   final PetCallback onTap;
 
   const PetsListView({
     Key? key,
     required this.pet,
-    required this.onDeletePet,
     required this.onTap,
   }) : super(key: key);
 
@@ -154,14 +174,10 @@ class PetsListView extends StatelessWidget {
             softWrap: true,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: IconButton(
-            onPressed: () async {
-              final shouldDelete = await showDeleteDialog(context);
-              if (shouldDelete) {
-                onDeletePet(text);
-              }
-            },
-            icon: const Icon(Icons.delete),
+          trailing: const Icon(
+            CupertinoIcons.chevron_forward,
+            color: Color(0xff212121),
+            size: 21,
           ),
         );
       },

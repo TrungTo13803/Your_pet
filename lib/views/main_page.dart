@@ -206,10 +206,7 @@ class _MainPageView extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(petsListRoute);
-                                },
+                                onPressed: () {},
                                 child: const Text('Show all',
                                     style: TextStyle(
                                       color: Color(0xFF0f67ca),
@@ -235,7 +232,7 @@ class _WelcomeBackLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
