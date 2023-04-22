@@ -1,7 +1,7 @@
 # PROJECT YOURPET
 
 ## Members:
-   - Hoàng Minh Tú (Captain)
+   - Hoàng Minh Tú
    - Đoàn Quốc Trung
    - Bùi Mạnh Tú
     
@@ -11,22 +11,20 @@ Dự án này là bài tập lớn của lớp kỹ thuật phần mềm.
 
 ### Giới thiệu về dự án
 - Tên dự án: yourPet.
-- Ý tưởng: Một ứng dụng quan sát sức khỏe của thú cưng, thuộc lĩnh vực y tế.
-- Đặt vấn đề: Ngày nay, ngày càng nhiều gia đình lựa chọn các loại động vật làm thú cưng để nuôi trong nhà. Đặc biệt là các bạn trẻ. Vì vậy mà vấn đề sức khỏe của thú cưng cũng được mọi người quan tâm nhiều hơn. Từ đó ứng dụng này sẽ giúp mọi người dễ dàng giám sát tình trạng sức khỏe của thú cưng mình.
+- Ý tưởng: Một ứng dụng lưu trữ và quản lý thông tin của thú cưng cũng như lịch sử khám bệnh, tiêm phòng và kết quả xét nghiệm, ghi chú về chế độ ăn uống
+- Đặt vấn đề: Ngày nay, ngày càng nhiều gia đình lựa chọn các loại động vật làm thú cưng để nuôi trong nhà. Ứng dụng này sẽ giúp mọi người dễ dàng ghi chú, quản lý giám sát thú cưng của mình và cũng như sức khỏe của chúng.
 
-- Đối tượng hướng tới: Tất cả mọi người đang sở hữu thiết bị thông minh, máy tính bảng, điện thoại, laptop, pc và đang nuôi thú cưng.
+- Đối tượng hướng tới: Tất cả mọi người đang sở hữu máy tính bảng, điện thoại và đang nuôi thú cưng.
 
 - Mục đích của ứng dụng:
-    + Giám sát sức khỏe thú cưng.
+    + Giúp người dùng giám sát sức khỏe thú cưng.
     + Quản lí, phân loại thú cưng mà người dùng đang sở hữu.
-	+ Đưa ra các gợi ý chăm sóc sức khỏe cho thú cưng.
 	+ Giúp người dùng lên lịch, thời gian ăn uống cho thú cưng.
-	+ Nhắc nhở người dùng đưa thú cưng đi khám khi đến hạn, cho thú cưng uống thuốc khi đến giờ.
-
+	
 - Mô tả tính năng: 
-    - Quản lý số lượng thú cưng, giống loại, các số đo sức khỏe các bệnh đã hoặc đang mắc, đã được đi khám hay chưa, có lịch uống thuốc của bác sĩ hay không. (Người dùng nhập các thông tin này)
-    - Lưu thông tin và đưa ra các tư vấn, thông báo cho người dùng cũng như tự động lên lịch nhắc nhở người dùng cho thú cưng uống thuốc (nếu có).
-    - Người dùng cũng có thể lên lịch hẹn giờ nhắc nhở cho thú cưng ăn uống, nghỉ ngơi. 
-    - Đề xuất một vài gợi ý về cách chăm sóc sức khỏe cho thú cưng, fun facts, cách huấn luyện, ... 
+    - Quản lý thông tin thú cưng: số lượng thú cưng, giống loại, các số đo sức khỏe, quản lý lịch sử y tế, lịch sử khám bệnh, tiêm phòng và xét nghiệm.
+    - Ghi chú về chế độ ăn uống: Bạn có thể ghi chú về chế độ ăn uống và lịch trình ăn uống của thú cưng của mình.
+    - Lưu thông tin, thông báo cho người dùng.
+    - Người dùng cũng có thể lên lịch hẹn giờ nhắc nhở cho để bản thân chăm sóc cho thú cưng.
 
-- Tech stack: Flutter, dart , FireBase.
+- Tech stack: Flutter, FireBase.
