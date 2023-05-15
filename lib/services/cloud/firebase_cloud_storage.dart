@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/services/cloud/cloud_pet.dart';
+import 'package:demo/services/cloud/cloud_schedule.dart';
 import 'package:demo/services/cloud/cloud_storage_const.dart';
 import 'package:demo/services/cloud/cloud_storage_exceptions.dart';
 
 class FirebaseCloudStorage {
   final pets = FirebaseFirestore.instance.collection('pets');
+  final schedules = FirebaseFirestore.instance.collection('schedule');
 
   Future<void> deletePet({required String documentId}) async {
     try {
@@ -70,6 +72,69 @@ class FirebaseCloudStorage {
       petDescription: '',
       petAge: '0',
     );
+  }
+
+  Future<void> deleteSchedule({required String documentId}) async {
+    try {
+      await schedules.doc(documentId).delete();
+    } catch (e) {
+      throw CouldNotDeletePetException();
+    }
+  }
+
+  Future<void> updateSchedule(
+      {required String documentId,
+      required String activityTitle,
+      required String activityDescription,
+      required String activityTime}) async {
+    try {
+      await schedules.doc(documentId).update({
+        activityTitleField: activityTitle,
+        activityDescriptionField: activityDescription,
+        activityTimeField: activityTime,
+      });
+    } catch (e) {
+      throw CouldNotUpdatePetException();
+    }
+  }
+
+  Stream<Iterable<CloudSchedule>> allSchedules({required String ownerUserId}) {
+    return schedules.snapshots().map((event) => event.docs
+        .map((doc) => CloudSchedule.fromSnapshot(doc))
+        .where((schedule) => schedule.ownerUserId == ownerUserId));
+  }
+
+  Future<Iterable<CloudSchedule>> getSchedule(
+      {required String ownerUserId}) async {
+    try {
+      return await schedules
+          .where(
+            ownerIdField,
+            isEqualTo: ownerUserId,
+          )
+          .get()
+          .then((value) =>
+              value.docs.map((doc) => CloudSchedule.fromSnapshot(doc)));
+    } catch (e) {
+      throw CouldNotGetAllPetsException();
+    }
+  }
+
+  Future<CloudSchedule> createNewSchedule({required String ownerUserId}) async {
+    final document = await schedules.add({
+      ownerIdField: ownerUserId,
+      activityTitleField: '',
+      activityDescriptionField: '',
+      activityTimeField: '',
+    });
+
+    final fetchSchedule = await document.get();
+    return CloudSchedule(
+        documentId: fetchSchedule.id,
+        ownerUserId: ownerUserId,
+        activityTitle: '',
+        activityDescription: '',
+        activityTime: '');
   }
 
   static final FirebaseCloudStorage _shared =

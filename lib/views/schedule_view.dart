@@ -1,15 +1,27 @@
+import 'package:demo/services/auth/auth_service.dart';
+import 'package:demo/services/cloud/cloud_schedule.dart';
+import 'package:demo/services/cloud/firebase_cloud_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../constrants/routes.dart';
 
 class ScheduleView extends StatefulWidget {
-  const ScheduleView({super.key});
+  const ScheduleView({Key? key}) : super(key: key);
 
   @override
   State<ScheduleView> createState() => _ScheduleViewState();
 }
 
 class _ScheduleViewState extends State<ScheduleView> {
+  late final FirebaseCloudStorage _appService;
+  String get userId => AuthService.firebase().currentUser!.id;
+
+  @override
+  void initState() {
+    _appService = FirebaseCloudStorage();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,8 +88,8 @@ class _ScheduleViewState extends State<ScheduleView> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Padding(
+                      children: [
+                        const Padding(
                           padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                           child: FittedBox(
                             child: Text(
@@ -89,6 +101,38 @@ class _ScheduleViewState extends State<ScheduleView> {
                             ),
                           ),
                         ),
+                        Expanded(
+                          child: StreamBuilder(
+                              stream:
+                                  _appService.allSchedules(ownerUserId: userId),
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                  case ConnectionState.active:
+                                    if (snapshot.hasData) {
+                                      final allSchedules = snapshot.data
+                                          as Iterable<CloudSchedule>;
+                                      return ScheduleListView(
+                                        schedule: allSchedules,
+                                        onTap: (schedule) {
+                                          Navigator.of(context).pushNamed(
+                                            updatePetRoute,
+                                            arguments: schedule,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      return const Center(
+                                          child: CircularProgressIndicator
+                                              .adaptive());
+                                    }
+                                  default:
+                                    return const Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive());
+                                }
+                              }),
+                        ),
                       ],
                     ),
                   ),
@@ -97,5 +141,44 @@ class _ScheduleViewState extends State<ScheduleView> {
             ],
           ),
         ));
+  }
+}
+
+typedef ScheduleCallback = void Function(CloudSchedule schedule);
+
+class ScheduleListView extends StatelessWidget {
+  final Iterable<CloudSchedule> schedule;
+  final ScheduleCallback onTap;
+
+  const ScheduleListView({
+    Key? key,
+    required this.schedule,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: schedule.length,
+      itemBuilder: (context, index) {
+        final text = schedule.elementAt(index);
+        return ListTile(
+          onTap: () {
+            onTap(text);
+          },
+          title: Text(
+            text.activityTitle,
+            maxLines: 1,
+            softWrap: true,
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: const Icon(
+            CupertinoIcons.chevron_forward,
+            color: Color(0xff212121),
+            size: 21,
+          ),
+        );
+      },
+    );
   }
 }
