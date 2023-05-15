@@ -18,7 +18,7 @@ class UserAuthView extends StatelessWidget {
               final user = AuthService.firebase().currentUser;
               if (user != null) {
                 if (user.isEmailVerified) {
-                  return const MainPage();
+                  return const MainPageView();
                 } else {
                   return const VerifyEmailView();
                 }

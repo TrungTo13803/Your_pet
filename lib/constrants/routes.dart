@@ -9,3 +9,4 @@ const newPetRoute = '/newPet/';
 const petsListRoute = '/petsList/';
 const createPetRoute = '/createPet/';
 const updatePetRoute = '/updatePet/';
+const scheduleRoute = '/schedule/';
