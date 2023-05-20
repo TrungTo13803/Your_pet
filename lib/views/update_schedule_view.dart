@@ -23,6 +23,7 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
   late final FirebaseCloudStorage _appService;
   late final TextEditingController _nameEditingController;
   late final TextEditingController _descriptionEditingController;
+  late final TextEditingController _petNameEditingController;
   late DateTime _dateTime = DateTime.now();
   late DateTime _currentDate = DateTime.parse(_schedule!.activityDate);
   late TimeOfDay _currentTime = TimeOfDay(
@@ -36,6 +37,7 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
     _appService = FirebaseCloudStorage();
     _nameEditingController = TextEditingController();
     _descriptionEditingController = TextEditingController();
+    _petNameEditingController = TextEditingController();
     super.initState();
   }
 
@@ -50,7 +52,7 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
       activityDescription: _descriptionEditingController.text,
       activityTime: _currentTime.toString(),
       activityDate: _currentDate.toString(),
-      petName: '',
+      petName: _petNameEditingController.text,
     );
   }
 
@@ -65,6 +67,11 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
     _descriptionEditingController.addListener(_textEditingControllerListener);
   }
 
+  void _setUpPetNameEditingController() {
+    _petNameEditingController.removeListener(_textEditingControllerListener);
+    _petNameEditingController.addListener(_textEditingControllerListener);
+  }
+
   Future<CloudSchedule> createOrGetExistingSchedule(
       BuildContext context) async {
     final widgetNote = context.getArgument<CloudSchedule>();
@@ -73,11 +80,7 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
       _schedule = widgetNote;
       _nameEditingController.text = widgetNote.activityTitle;
       _descriptionEditingController.text = widgetNote.activityDescription;
-
-      // _currentTime = TimeOfDay(
-      //     hour: DateTime.parse(widgetNote.activityDate).hour,
-      //     minute: DateTime.parse(widgetNote.activityDate).minute);
-      // _currentDate = DateTime.parse(widgetNote.activityDate);
+      _petNameEditingController.text = widgetNote.petName;
 
       return widgetNote;
     }
@@ -116,7 +119,7 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
           activityDescription: _descriptionEditingController.text,
           activityTime: _currentTime.toString(),
           activityDate: _currentDate.toString(),
-          petName: '');
+          petName: _petNameEditingController.text);
     }
   }
 
@@ -194,19 +197,42 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
                                               8, 12, 8, 8),
                                           child: TextButton(
                                               onPressed: () async {
-                                                print(_currentDate);
-                                                print(_currentTime);
-                                                FocusScope.of(context)
-                                                    .unfocus();
+                                                if (_petNameEditingController
+                                                        .text.isEmpty ||
+                                                    _descriptionEditingController
+                                                        .text.isEmpty ||
+                                                    _nameEditingController
+                                                        .text.isEmpty) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                          content: Text(
+                                                              'Please fill all the fields')));
+                                                  return;
+                                                }
                                                 _saveIfTapOnAddButton();
+                                                try {
+                                                  await NotificationService()
+                                                      .scheduleNotification(
+                                                    body: 'Notification',
+                                                    title: 'Hello',
+                                                    scheduledNotificationDateTime:
+                                                        _currentDate,
+                                                  );
 
-                                                await NotificationService()
-                                                    .scheduleNotification(
-                                                  body: 'Notification',
-                                                  title: 'Hello',
-                                                  scheduledNotificationDateTime:
-                                                      _currentDate,
-                                                );
+                                                  if (_dateTime
+                                                      .isAtSameMomentAs(
+                                                          DateTime.now())) {
+                                                    throw Exception(ScaffoldMessenger
+                                                            .of(context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    'Please fill all the fields'))));
+                                                  }
+                                                } catch (e) {
+                                                  // Handle the exception here
+                                                  print('Error caught: $e');
+                                                }
                                               },
                                               child: const Text('Save',
                                                   style: TextStyle(
@@ -217,6 +243,24 @@ class _UpdateScheduleViewState extends State<UpdateScheduleView> {
                                     ]))
                               ],
                             ),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                child: SizedBox(
+                                    height: 50,
+                                    child: TextField(
+                                        controller: _petNameEditingController,
+                                        keyboardType: TextInputType.name,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xff212121),
+                                        ),
+                                        decoration: const InputDecoration(
+                                            labelText: "Pet name",
+                                            labelStyle: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                            ))))),
                             Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 10, 20, 10),

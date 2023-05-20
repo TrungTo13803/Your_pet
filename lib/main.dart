@@ -1,14 +1,17 @@
 import 'package:demo/views/account_children_views/change_email_view.dart';
+import 'package:demo/views/account_children_views/change_password_view.dart';
 import 'package:demo/views/account_children_views/personal_info_view.dart';
 import 'package:demo/views/account_page.dart';
 import 'package:demo/views/main_page.dart';
+import 'package:demo/views/new_note_view.dart';
 import 'package:demo/views/new_pet_view.dart';
 import 'package:demo/views/new_schedule_view.dart';
 import 'package:demo/views/pets_list_view.dart';
 import 'package:demo/views/schedule_view.dart';
-import 'package:demo/views/select_pet_view.dart';
+import 'package:demo/views/update_note_view.dart';
 import 'package:demo/views/update_pet_view.dart';
 import 'package:demo/views/update_schedule_view.dart';
+import 'package:demo/views/user_auth_views/forgot_password_view.dart';
 import 'package:demo/views/user_auth_views/login_view.dart';
 import 'package:demo/views/user_auth_views/user_auth_page.dart';
 import 'package:demo/views/user_auth_views/verify_email_view.dart';
@@ -53,6 +56,10 @@ class MyHome extends StatelessWidget {
         updateScheduleRoute: (context) => const UpdateScheduleView(),
         personalInfoRoute: (context) => const PersonalInfoView(),
         changeEmailRoute: (context) => const ChangeEmailView(),
+        createNoteRoute: (context) => const CreateNoteView(),
+        updateNoteRoute: (context) => const UpdateNoteView(),
+        forgotPasswordRoute: (context) => const ForgotPasswordView(),
+        changePasswordRoute: (context) => const ChangePasswordView(),
       },
     );
   }

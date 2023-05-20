@@ -166,7 +166,10 @@ class _PersonalInfoViewState extends State<PersonalInfoView> {
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400))))),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(changePasswordRoute);
+                          },
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [

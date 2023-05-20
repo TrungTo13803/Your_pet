@@ -27,6 +27,7 @@ class _CreatePetViewState extends State<CreatePetView> {
   late final TextEditingController _ageEditingController;
   late final TextEditingController _diseaseEditingController;
   late final TextEditingController _lastTimeSickEditingController;
+  late final TextEditingController _weightEditingController;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _CreatePetViewState extends State<CreatePetView> {
     _descriptionEditingController = TextEditingController();
     _diseaseEditingController = TextEditingController();
     _lastTimeSickEditingController = TextEditingController();
+    _weightEditingController = TextEditingController();
     super.initState();
   }
 
@@ -58,6 +60,7 @@ class _CreatePetViewState extends State<CreatePetView> {
       petDisease: _diseaseEditingController.text,
       lastTimeSick:
           '${_lastTimeSickEditingController.text} ${selectedDateType!} ago',
+      weight: _weightEditingController.text,
     );
   }
 
@@ -93,6 +96,11 @@ class _CreatePetViewState extends State<CreatePetView> {
     _lastTimeSickEditingController.addListener(_textEditingControllerListener);
   }
 
+  void _setUpWeightEditingControllerListener() {
+    _weightEditingController.removeListener(_textEditingControllerListener);
+    _weightEditingController.addListener(_textEditingControllerListener);
+  }
+
   Future<CloudPet> createPet(BuildContext context) async {
     final widgetNote = context.getArgument<CloudPet>();
 
@@ -104,6 +112,7 @@ class _CreatePetViewState extends State<CreatePetView> {
       _ageEditingController.text = widgetNote.petAge;
       _diseaseEditingController.text = widgetNote.petDisease;
       _lastTimeSickEditingController.text = widgetNote.lastTimeSick;
+      _weightEditingController.text = widgetNote.weight;
       return widgetNote;
     }
 
@@ -127,6 +136,7 @@ class _CreatePetViewState extends State<CreatePetView> {
         _diseaseEditingController.text.isEmpty &&
         _lastTimeSickEditingController.text.isEmpty &&
         selectedDateType == 'Select' &&
+        _ageEditingController.text.isEmpty &&
         pet != null) {
       _appService.deletePet(documentId: pet.documentId);
     }
@@ -145,7 +155,8 @@ class _CreatePetViewState extends State<CreatePetView> {
         description.isNotEmpty &&
         _diseaseEditingController.text.isNotEmpty &&
         _lastTimeSickEditingController.text.isNotEmpty &&
-        selectedDateType != 'Select') {
+        selectedDateType != 'Select' &&
+        _weightEditingController.text.isNotEmpty) {
       _appService.deletePet(documentId: pet.documentId);
     } else {
       _deleteIfTextIsEmpty();
@@ -166,7 +177,8 @@ class _CreatePetViewState extends State<CreatePetView> {
             selectedType != 'Select' ||
             description.isNotEmpty ||
             disease.isNotEmpty ||
-            (lastTimeSick.isNotEmpty && selectedDateType != 'Select'))) {
+            (lastTimeSick.isNotEmpty && selectedDateType != 'Select') ||
+            _weightEditingController.text.isNotEmpty)) {
       await _appService.updatePet(
         documentId: pet.documentId,
         petName: name,
@@ -175,6 +187,7 @@ class _CreatePetViewState extends State<CreatePetView> {
         petAge: age,
         petDisease: disease,
         lastTimeSick: '$lastTimeSick ${selectedDateType!} ago',
+        weight: _weightEditingController.text,
       );
     }
   }
@@ -190,6 +203,7 @@ class _CreatePetViewState extends State<CreatePetView> {
     _ageEditingController.dispose();
     _diseaseEditingController.dispose();
     _lastTimeSickEditingController.dispose();
+    _weightEditingController.dispose();
     super.dispose();
   }
 
@@ -197,14 +211,14 @@ class _CreatePetViewState extends State<CreatePetView> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: const Color(0xfff5f5f7),
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         body: FutureBuilder(
             future: createPet(context),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
                   _setUpNameEditingControllerListener();
-                  _setUpTypeEditingControllerListener();
+                  _setUpWeightEditingControllerListener();
                   _setUpDescriptionEditingControllerListener();
                   _setUpAgeEditingControllerListener();
                   _setUpDiseaseEditingControllerListener();
@@ -269,21 +283,10 @@ class _CreatePetViewState extends State<CreatePetView> {
                               )
                             ],
                           ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 0, 20, 3),
-                            child: Text(
-                              'Pet name',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xff2212121),
-                              ),
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                             child: SizedBox(
-                              height: 40,
+                              height: 50,
                               child: TextField(
                                 controller: _nameEditingController,
                                 keyboardType: TextInputType.name,
@@ -292,8 +295,8 @@ class _CreatePetViewState extends State<CreatePetView> {
                                   color: Color(0xff212121),
                                 ),
                                 decoration: const InputDecoration(
-                                    hintText: "What do you call your pet?",
-                                    hintStyle: TextStyle(
+                                    labelText: "Pet's name",
+                                    labelStyle: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     )),
@@ -303,7 +306,7 @@ class _CreatePetViewState extends State<CreatePetView> {
                           Row(
                             children: [
                               const Padding(
-                                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                                padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
                                 child: Text(
                                   'Animal type',
                                   style: TextStyle(
@@ -343,21 +346,10 @@ class _CreatePetViewState extends State<CreatePetView> {
                                   )),
                             ],
                           ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 3, 20, 0),
-                            child: Text(
-                              "Pet's age",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xff2212121),
-                              ),
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 3, 20, 5),
                             child: SizedBox(
-                              height: 40,
+                              height: 50,
                               child: TextField(
                                 controller: _ageEditingController,
                                 keyboardType: TextInputType.name,
@@ -367,8 +359,29 @@ class _CreatePetViewState extends State<CreatePetView> {
                                   color: Color(0xff212121),
                                 ),
                                 decoration: const InputDecoration(
-                                    hintText: "Age",
-                                    hintStyle: TextStyle(
+                                    labelText: "Age",
+                                    labelStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 5),
+                            child: SizedBox(
+                              height: 50,
+                              child: TextField(
+                                controller: _weightEditingController,
+                                keyboardType: TextInputType.name,
+                                maxLength: null,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff212121),
+                                ),
+                                decoration: const InputDecoration(
+                                    labelText: "Weight (kg)",
+                                    labelStyle: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     )),
@@ -389,7 +402,7 @@ class _CreatePetViewState extends State<CreatePetView> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                             child: SizedBox(
-                              height: 40,
+                              height: 50,
                               child: TextField(
                                 controller: _diseaseEditingController,
                                 keyboardType: TextInputType.multiline,
@@ -409,7 +422,7 @@ class _CreatePetViewState extends State<CreatePetView> {
                             ),
                           ),
                           const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 3, 20, 5),
+                            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                             child: Text(
                               'When was the last time your pet was sick?',
                               style: TextStyle(
@@ -424,7 +437,7 @@ class _CreatePetViewState extends State<CreatePetView> {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  height: 40,
+                                  height: 50,
                                   width: 100,
                                   child: TextField(
                                     controller: _lastTimeSickEditingController,
@@ -475,21 +488,10 @@ class _CreatePetViewState extends State<CreatePetView> {
                               ],
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(20, 3, 20, 5),
-                            child: Text(
-                              'Description',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xff2212121),
-                              ),
-                            ),
-                          ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
                             child: SizedBox(
-                              height: 40,
+                              height: 50,
                               child: TextField(
                                 controller: _descriptionEditingController,
                                 keyboardType: TextInputType.multiline,

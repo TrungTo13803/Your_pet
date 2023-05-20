@@ -161,6 +161,17 @@ class _LoginViewState extends State<LoginView> {
               padding: const EdgeInsets.all(2.0),
               child: TextButton(
                 onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      forgotPasswordRoute, (route) => false);
+                },
+                child: const Text(
+                  "Forgot password",
+                ),
+              )),
+          Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: TextButton(
+                onPressed: () {
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil(registerRoute, (route) => false);
                 },

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:demo/services/cloud/firebase_cloud_storage.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:intl/intl.dart';
+import 'package:timezone/timezone.dart';
 
 class CreateScheduleView extends StatefulWidget {
   const CreateScheduleView({Key? key}) : super(key: key);
@@ -205,14 +206,44 @@ class _CreateScheduleViewState extends State<CreateScheduleView> {
                                               8, 12, 8, 8),
                                           child: TextButton(
                                               onPressed: () async {
+                                                if (_petNameEditingController
+                                                        .text.isEmpty ||
+                                                    _descriptionEditingController
+                                                        .text.isEmpty ||
+                                                    _nameEditingController
+                                                        .text.isEmpty) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                          content: Text(
+                                                              'Please fill all the fields')));
+                                                  return;
+                                                }
                                                 _saveIfTapOnAddButton();
-                                                await NotificationService()
-                                                    .scheduleNotification(
-                                                  body: 'Notification',
-                                                  title: 'Hello',
-                                                  scheduledNotificationDateTime:
-                                                      _dateTime,
-                                                );
+                                                try {
+                                                  await NotificationService()
+                                                      .scheduleNotification(
+                                                    body: 'Notification',
+                                                    title: 'Hello',
+                                                    scheduledNotificationDateTime:
+                                                        _dateTime,
+                                                  );
+
+                                                  // Your code that may throw the exception
+                                                  if (_dateTime
+                                                      .isAtSameMomentAs(
+                                                          DateTime.now())) {
+                                                    throw Exception(ScaffoldMessenger
+                                                            .of(context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    'Please fill all the fields'))));
+                                                  }
+                                                } catch (e) {
+                                                  // Handle the exception here
+                                                  print('Error caught: $e');
+                                                }
+
                                                 Navigator.of(context)
                                                     .pushNamed(scheduleRoute);
                                               },

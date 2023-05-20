@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo/services/cloud/cloud_note.dart';
 import 'package:demo/services/cloud/cloud_pet.dart';
 import 'package:demo/services/cloud/cloud_schedule.dart';
 import 'package:demo/services/cloud/cloud_storage_const.dart';
@@ -7,6 +8,71 @@ import 'package:demo/services/cloud/cloud_storage_exceptions.dart';
 class FirebaseCloudStorage {
   final pets = FirebaseFirestore.instance.collection('pets');
   final schedules = FirebaseFirestore.instance.collection('schedule');
+  final notes = FirebaseFirestore.instance.collection('notes');
+
+  Future<void> deleteNote({required String documentId}) async {
+    try {
+      await notes.doc(documentId).delete();
+    } catch (e) {
+      throw CouldNotDeletePetException();
+    }
+  }
+
+  Future<void> updateNote({
+    required String documentId,
+    required String petName,
+    required String noteTitle,
+    required String note,
+  }) async {
+    try {
+      await notes.doc(documentId).update({
+        petNameField: petName,
+        noteTitleField: noteTitle,
+        noteField: note,
+      });
+    } catch (e) {
+      throw CouldNotUpdatePetException();
+    }
+  }
+
+  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) {
+    return notes.snapshots().map((event) => event.docs
+        .map((doc) => CloudNote.fromSnapshot(doc))
+        .where((note) => note.ownerUserId == ownerUserId));
+  }
+
+  Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
+    try {
+      return await notes
+          .where(
+            ownerIdField,
+            isEqualTo: ownerUserId,
+          )
+          .get()
+          .then(
+              (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)));
+    } catch (e) {
+      throw CouldNotGetAllPetsException();
+    }
+  }
+
+  Future<CloudNote> createNewNote({required String ownerUserId}) async {
+    final document = await notes.add({
+      ownerIdField: ownerUserId,
+      petNameField: '',
+      noteTitleField: '',
+      noteField: '',
+    });
+
+    final fetchNote = await document.get();
+    return CloudNote(
+      documentId: fetchNote.id,
+      ownerUserId: ownerUserId,
+      petName: '',
+      noteTitle: '',
+      note: '',
+    );
+  }
 
   Future<void> deletePet({required String documentId}) async {
     try {
@@ -24,6 +90,7 @@ class FirebaseCloudStorage {
     required String petAge,
     required String petDisease,
     required String lastTimeSick,
+    required String weight,
   }) async {
     try {
       await pets.doc(documentId).update({
@@ -33,6 +100,7 @@ class FirebaseCloudStorage {
         petAgeField: petAge,
         petDiseaseField: petDisease,
         lastTimeSickField: lastTimeSick,
+        weightField: weight,
       });
     } catch (e) {
       throw CouldNotUpdatePetException();
@@ -68,6 +136,7 @@ class FirebaseCloudStorage {
       petAgeField: '0',
       petDiseaseField: '',
       lastTimeSickField: '',
+      weightField: '0',
     });
 
     final fetchPet = await document.get();
@@ -80,6 +149,7 @@ class FirebaseCloudStorage {
       petAge: '0',
       petDisease: '',
       lastTimeSick: '',
+      weight: '0',
     );
   }
 
