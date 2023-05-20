@@ -10,6 +10,8 @@ class CloudPet {
   final String petType;
   final String petDescription;
   final String petAge;
+  final String petDisease;
+  final String lastTimeSick;
   const CloudPet({
     required this.documentId,
     required this.ownerUserId,
@@ -17,6 +19,8 @@ class CloudPet {
     required this.petType,
     required this.petDescription,
     required this.petAge,
+    required this.petDisease,
+    required this.lastTimeSick,
   });
 
   CloudPet.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -25,5 +29,7 @@ class CloudPet {
         petName = snapshot.data()[petNameField] as String? ?? '',
         petType = snapshot.data()[petTypeField] as String? ?? '',
         petDescription = snapshot.data()[petDescriptionField] as String? ?? '',
-        petAge = snapshot.data()[petAgeField] as String? ?? '0';
+        petAge = snapshot.data()[petAgeField] as String? ?? '0',
+        petDisease = snapshot.data()[petDiseaseField] as String? ?? '',
+        lastTimeSick = snapshot.data()[lastTimeSickField] as String? ?? '';
 }

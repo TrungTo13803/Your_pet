@@ -11,6 +11,8 @@ class CloudSchedule {
   final String activityTitle;
   final String activityDescription;
   final String activityTime;
+  final String activityDate;
+  final String petName;
 
   const CloudSchedule({
     required this.documentId,
@@ -18,6 +20,8 @@ class CloudSchedule {
     required this.activityTitle,
     required this.activityDescription,
     required this.activityTime,
+    required this.activityDate,
+    required this.petName,
   });
 
   CloudSchedule.fromSnapshot(
@@ -27,5 +31,7 @@ class CloudSchedule {
         activityTitle = snapshot.data()[activityTitleField] as String? ?? '',
         activityDescription =
             snapshot.data()[activityDescriptionField] as String? ?? '',
-        activityTime = snapshot.data()[activityTimeField] as String? ?? '';
+        activityTime = snapshot.data()[activityTimeField] as String? ?? '',
+        activityDate = snapshot.data()[activityDateField] as String? ?? '',
+        petName = snapshot.data()[petNameField] as String? ?? '';
 }

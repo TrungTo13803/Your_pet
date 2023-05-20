@@ -119,7 +119,11 @@ class _AccountPageState extends State<AccountPage> {
                           )
                         ],
                       ),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        Navigator.of(context).pushNamed(
+                          personalInfoRoute,
+                        );
+                      },
                     ),
                   ),
                   Expanded(

@@ -21,6 +21,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
   late final TextEditingController _typeEditingController;
   late final TextEditingController _descriptionEditingController;
   late final TextEditingController _ageEditingController;
+  late final TextEditingController _diseaseEditingController;
+  late final TextEditingController _lastTimeSickEditingController;
 
   @override
   void initState() {
@@ -29,6 +31,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
     _typeEditingController = TextEditingController();
     _ageEditingController = TextEditingController();
     _descriptionEditingController = TextEditingController();
+    _diseaseEditingController = TextEditingController();
+    _lastTimeSickEditingController = TextEditingController();
     super.initState();
   }
 
@@ -47,6 +51,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
       petType: type,
       petDescription: description,
       petAge: age,
+      petDisease: _diseaseEditingController.text,
+      lastTimeSick: _lastTimeSickEditingController.text,
     );
   }
 
@@ -71,6 +77,17 @@ class _UpdatePetViewState extends State<UpdatePetView> {
     _ageEditingController.addListener(_textEditingControllerListener);
   }
 
+  void _setUpDiseaseEditingControllerListener() {
+    _diseaseEditingController.removeListener(_textEditingControllerListener);
+    _diseaseEditingController.addListener(_textEditingControllerListener);
+  }
+
+  void _setUpLastTimeSickEditingControllerListener() {
+    _lastTimeSickEditingController
+        .removeListener(_textEditingControllerListener);
+    _lastTimeSickEditingController.addListener(_textEditingControllerListener);
+  }
+
   Future<CloudPet> createOrGetExistingPet(BuildContext context) async {
     final widgetNote = context.getArgument<CloudPet>();
 
@@ -80,6 +97,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
       _typeEditingController.text = widgetNote.petType;
       _descriptionEditingController.text = widgetNote.petDescription;
       _ageEditingController.text = widgetNote.petAge;
+      _diseaseEditingController.text = widgetNote.petDisease;
+      _lastTimeSickEditingController.text = widgetNote.lastTimeSick;
       return widgetNote;
     }
 
@@ -100,6 +119,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
         _typeEditingController.text.isEmpty &&
         _descriptionEditingController.text.isEmpty &&
         _ageEditingController.text.isEmpty &&
+        _diseaseEditingController.text.isEmpty &&
+        _lastTimeSickEditingController.text.isEmpty &&
         pet != null) {
       _appService.deletePet(documentId: pet.documentId);
     }
@@ -111,17 +132,23 @@ class _UpdatePetViewState extends State<UpdatePetView> {
     final type = _typeEditingController.text;
     final description = _descriptionEditingController.text;
     final age = _ageEditingController.text;
+    final disease = _diseaseEditingController.text;
+    final lastTimeSick = _lastTimeSickEditingController.text;
     if (pet != null &&
         name.isNotEmpty &&
         type.isNotEmpty &&
         description.isNotEmpty &&
-        age.isNotEmpty) {
+        age.isNotEmpty &&
+        disease.isNotEmpty &&
+        lastTimeSick.isNotEmpty) {
       await _appService.updatePet(
         documentId: pet.documentId,
         petName: name,
         petType: type,
         petDescription: description,
         petAge: age,
+        petDisease: disease,
+        lastTimeSick: lastTimeSick,
       );
     }
   }
@@ -142,6 +169,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
     _typeEditingController.dispose();
     _descriptionEditingController.dispose();
     _ageEditingController.dispose();
+    _diseaseEditingController.dispose();
+    _lastTimeSickEditingController.dispose();
     super.dispose();
   }
 
@@ -159,6 +188,8 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                   _setUpTypeEditingControllerListener();
                   _setUpDescriptionEditingControllerListener();
                   _setUpAgeEditingControllerListener();
+                  _setUpDiseaseEditingControllerListener();
+                  _setUpLastTimeSickEditingControllerListener();
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
@@ -187,11 +218,10 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                     ),
                                   )),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 12, 8, 8),
-                                  child: Text("Edit ${_pet!.petName}",
-                                      style: const TextStyle(
+                                const Padding(
+                                  padding: EdgeInsets.fromLTRB(8, 12, 8, 8),
+                                  child: Text("Edit pet",
+                                      style: TextStyle(
                                           color: Color(0xff212121),
                                           fontSize: 15,
                                           fontWeight: FontWeight.w500)),
@@ -235,7 +265,7 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                   decoration: const InputDecoration(
                                       labelText: "This pet is called",
                                       labelStyle: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400,
                                       )),
                                 ),
@@ -256,7 +286,7 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                   decoration: InputDecoration(
                                       labelText: "${_pet!.petName} is a",
                                       labelStyle: const TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400,
                                       )),
                                 ),
@@ -275,10 +305,54 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                     fontSize: 14,
                                     color: Color(0xff212121),
                                   ),
-                                  decoration: InputDecoration(
-                                      labelText: "${_pet!.petName}'s age is",
-                                      labelStyle: const TextStyle(
-                                        fontSize: 15,
+                                  decoration: const InputDecoration(
+                                      labelText: "Age",
+                                      labelStyle: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                              child: SizedBox(
+                                height: 50,
+                                child: TextField(
+                                  controller: _diseaseEditingController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLength: null,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff212121),
+                                  ),
+                                  decoration: const InputDecoration(
+                                      labelText: "Disease",
+                                      labelStyle: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                              child: SizedBox(
+                                height: 50,
+                                child: TextField(
+                                  controller: _lastTimeSickEditingController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLength: null,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xff212121),
+                                  ),
+                                  decoration: const InputDecoration(
+                                      labelText: "Last time sick",
+                                      labelStyle: TextStyle(
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400,
                                       )),
                                 ),
@@ -301,7 +375,7 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                       labelText:
                                           "Something about ${_pet!.petName}",
                                       labelStyle: const TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w400,
                                       )),
                                 ),

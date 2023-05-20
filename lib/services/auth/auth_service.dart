@@ -19,6 +19,13 @@ class AuthService implements AuthProvider {
   AuthUser? get currentUser => provider.currentUser;
 
   @override
+  Future<AuthUser> updateUser({
+    required String email,
+    required String password,
+  }) =>
+      provider.updateUser(email: email, password: password);
+
+  @override
   Future<AuthUser> logIn({
     required String email,
     required String password,

@@ -16,18 +16,23 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<void> updatePet(
-      {required String documentId,
-      required String petName,
-      required String petType,
-      required String petDescription,
-      required String petAge}) async {
+  Future<void> updatePet({
+    required String documentId,
+    required String petName,
+    required String petType,
+    required String petDescription,
+    required String petAge,
+    required String petDisease,
+    required String lastTimeSick,
+  }) async {
     try {
       await pets.doc(documentId).update({
         petNameField: petName,
         petTypeField: petType,
         petDescriptionField: petDescription,
-        petAgeField: petAge
+        petAgeField: petAge,
+        petDiseaseField: petDisease,
+        lastTimeSickField: lastTimeSick,
       });
     } catch (e) {
       throw CouldNotUpdatePetException();
@@ -61,6 +66,8 @@ class FirebaseCloudStorage {
       petTypeField: '',
       petDescriptionField: '',
       petAgeField: '0',
+      petDiseaseField: '',
+      lastTimeSickField: '',
     });
 
     final fetchPet = await document.get();
@@ -71,6 +78,8 @@ class FirebaseCloudStorage {
       petType: '',
       petDescription: '',
       petAge: '0',
+      petDisease: '',
+      lastTimeSick: '',
     );
   }
 
@@ -82,16 +91,21 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<void> updateSchedule(
-      {required String documentId,
-      required String activityTitle,
-      required String activityDescription,
-      required String activityTime}) async {
+  Future<void> updateSchedule({
+    required String documentId,
+    required String activityTitle,
+    required String activityDescription,
+    required String activityTime,
+    required String activityDate,
+    required String petName,
+  }) async {
     try {
       await schedules.doc(documentId).update({
         activityTitleField: activityTitle,
         activityDescriptionField: activityDescription,
         activityTimeField: activityTime,
+        activityDateField: activityDate,
+        petNameField: petName,
       });
     } catch (e) {
       throw CouldNotUpdatePetException();
@@ -126,15 +140,20 @@ class FirebaseCloudStorage {
       activityTitleField: '',
       activityDescriptionField: '',
       activityTimeField: '',
+      activityDateField: '',
+      petNameField: '',
     });
 
     final fetchSchedule = await document.get();
     return CloudSchedule(
-        documentId: fetchSchedule.id,
-        ownerUserId: ownerUserId,
-        activityTitle: '',
-        activityDescription: '',
-        activityTime: '');
+      documentId: fetchSchedule.id,
+      ownerUserId: ownerUserId,
+      activityTitle: '',
+      activityDescription: '',
+      activityTime: '',
+      activityDate: '',
+      petName: '',
+    );
   }
 
   static final FirebaseCloudStorage _shared =

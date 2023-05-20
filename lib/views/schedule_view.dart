@@ -46,7 +46,7 @@ class _ScheduleViewState extends State<ScheduleView> {
                       padding: EdgeInsets.all(8.0),
                       child: FittedBox(
                           child: Text(
-                        'Schedule activity',
+                        'Activities',
                         style: TextStyle(
                             color: Color(0xff212121),
                             fontSize: 16,
@@ -59,7 +59,8 @@ class _ScheduleViewState extends State<ScheduleView> {
                         Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () => Navigator.of(context)
+                                  .pushNamed(createScheduleRoute),
                               icon: const Icon(
                                 CupertinoIcons.plus,
                                 color: Color(0xFF0f67ca),
@@ -115,10 +116,9 @@ class _ScheduleViewState extends State<ScheduleView> {
                                       return ScheduleListView(
                                         schedule: allSchedules,
                                         onTap: (schedule) {
-                                          Navigator.of(context).pushNamed(
-                                            updatePetRoute,
-                                            arguments: schedule,
-                                          );
+                                          Navigator.pushNamed(
+                                              context, updateScheduleRoute,
+                                              arguments: schedule);
                                         },
                                       );
                                     } else {
@@ -167,7 +167,7 @@ class ScheduleListView extends StatelessWidget {
             onTap(text);
           },
           title: Text(
-            text.activityTitle,
+            "${text.activityTitle} (${text.petName})",
             maxLines: 1,
             softWrap: true,
             overflow: TextOverflow.ellipsis,

@@ -14,12 +14,19 @@ class CreatePetView extends StatefulWidget {
 }
 
 class _CreatePetViewState extends State<CreatePetView> {
+  List<String> types = ['Select', 'Dog', 'Cat', 'Bird', 'Fish', 'Other'];
+  String? selectedType = 'Select';
+
+  List<String> dateTypes = ['Select', 'Day(s)', 'Month(s)', 'Year(s)'];
+  String? selectedDateType = 'Select';
   CloudPet? _pet;
   late final FirebaseCloudStorage _appService;
   late final TextEditingController _nameEditingController;
   late final TextEditingController _typeEditingController;
   late final TextEditingController _descriptionEditingController;
   late final TextEditingController _ageEditingController;
+  late final TextEditingController _diseaseEditingController;
+  late final TextEditingController _lastTimeSickEditingController;
 
   @override
   void initState() {
@@ -28,6 +35,8 @@ class _CreatePetViewState extends State<CreatePetView> {
     _typeEditingController = TextEditingController();
     _ageEditingController = TextEditingController();
     _descriptionEditingController = TextEditingController();
+    _diseaseEditingController = TextEditingController();
+    _lastTimeSickEditingController = TextEditingController();
     super.initState();
   }
 
@@ -43,9 +52,12 @@ class _CreatePetViewState extends State<CreatePetView> {
     await _appService.updatePet(
       documentId: pet.documentId,
       petName: name,
-      petType: type,
+      petType: selectedType!,
       petDescription: description,
       petAge: age,
+      petDisease: _diseaseEditingController.text,
+      lastTimeSick:
+          '${_lastTimeSickEditingController.text} ${selectedDateType!} ago',
     );
   }
 
@@ -70,6 +82,17 @@ class _CreatePetViewState extends State<CreatePetView> {
     _ageEditingController.addListener(_textEditingControllerListener);
   }
 
+  void _setUpDiseaseEditingControllerListener() {
+    _diseaseEditingController.removeListener(_textEditingControllerListener);
+    _diseaseEditingController.addListener(_textEditingControllerListener);
+  }
+
+  void _setUpLastTimeSickEditingControllerListener() {
+    _lastTimeSickEditingController
+        .removeListener(_textEditingControllerListener);
+    _lastTimeSickEditingController.addListener(_textEditingControllerListener);
+  }
+
   Future<CloudPet> createPet(BuildContext context) async {
     final widgetNote = context.getArgument<CloudPet>();
 
@@ -79,6 +102,8 @@ class _CreatePetViewState extends State<CreatePetView> {
       _typeEditingController.text = widgetNote.petType;
       _descriptionEditingController.text = widgetNote.petDescription;
       _ageEditingController.text = widgetNote.petAge;
+      _diseaseEditingController.text = widgetNote.petDisease;
+      _lastTimeSickEditingController.text = widgetNote.lastTimeSick;
       return widgetNote;
     }
 
@@ -96,9 +121,12 @@ class _CreatePetViewState extends State<CreatePetView> {
   void _deleteIfTextIsEmpty() {
     final pet = _pet;
     if (_nameEditingController.text.isEmpty &&
-        _typeEditingController.text.isEmpty &&
+        selectedType == 'Select' &&
         _descriptionEditingController.text.isEmpty &&
         _ageEditingController.text.isEmpty &&
+        _diseaseEditingController.text.isEmpty &&
+        _lastTimeSickEditingController.text.isEmpty &&
+        selectedDateType == 'Select' &&
         pet != null) {
       _appService.deletePet(documentId: pet.documentId);
     }
@@ -113,8 +141,11 @@ class _CreatePetViewState extends State<CreatePetView> {
     if (pet != null &&
         name.isNotEmpty &&
         age.isNotEmpty &&
-        type.isNotEmpty &&
-        description.isNotEmpty) {
+        selectedType != 'Select' &&
+        description.isNotEmpty &&
+        _diseaseEditingController.text.isNotEmpty &&
+        _lastTimeSickEditingController.text.isNotEmpty &&
+        selectedDateType != 'Select') {
       _appService.deletePet(documentId: pet.documentId);
     } else {
       _deleteIfTextIsEmpty();
@@ -127,17 +158,23 @@ class _CreatePetViewState extends State<CreatePetView> {
     final type = _typeEditingController.text;
     final description = _descriptionEditingController.text;
     final age = _ageEditingController.text;
+    final disease = _diseaseEditingController.text;
+    final lastTimeSick = _lastTimeSickEditingController.text;
     if (pet != null &&
         (name.isNotEmpty ||
             age.isNotEmpty ||
-            type.isNotEmpty ||
-            description.isNotEmpty)) {
+            selectedType != 'Select' ||
+            description.isNotEmpty ||
+            disease.isNotEmpty ||
+            (lastTimeSick.isNotEmpty && selectedDateType != 'Select'))) {
       await _appService.updatePet(
         documentId: pet.documentId,
         petName: name,
-        petType: type,
+        petType: selectedType!,
         petDescription: description,
         petAge: age,
+        petDisease: disease,
+        lastTimeSick: '$lastTimeSick ${selectedDateType!} ago',
       );
     }
   }
@@ -146,10 +183,13 @@ class _CreatePetViewState extends State<CreatePetView> {
   void dispose() {
     _deleteIfTextIsEmpty();
     _deleteIfTapOnBackButton();
+
     _nameEditingController.dispose();
     _typeEditingController.dispose();
     _descriptionEditingController.dispose();
     _ageEditingController.dispose();
+    _diseaseEditingController.dispose();
+    _lastTimeSickEditingController.dispose();
     super.dispose();
   }
 
@@ -167,6 +207,8 @@ class _CreatePetViewState extends State<CreatePetView> {
                   _setUpTypeEditingControllerListener();
                   _setUpDescriptionEditingControllerListener();
                   _setUpAgeEditingControllerListener();
+                  _setUpDiseaseEditingControllerListener();
+                  _setUpLastTimeSickEditingControllerListener();
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
@@ -227,10 +269,21 @@ class _CreatePetViewState extends State<CreatePetView> {
                               )
                             ],
                           ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 3),
+                            child: Text(
+                              'Pet name',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff2212121),
+                              ),
+                            ),
+                          ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                             child: SizedBox(
-                              height: 50,
+                              height: 40,
                               child: TextField(
                                 controller: _nameEditingController,
                                 keyboardType: TextInputType.name,
@@ -239,39 +292,72 @@ class _CreatePetViewState extends State<CreatePetView> {
                                   color: Color(0xff212121),
                                 ),
                                 decoration: const InputDecoration(
-                                    labelText: "How should we call him or her?",
-                                    labelStyle: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
+                                    hintText: "What do you call your pet?",
+                                    hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
                                     )),
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            child: SizedBox(
-                              height: 50,
-                              child: TextField(
-                                controller: _typeEditingController,
-                                keyboardType: TextInputType.name,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xff212121),
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                                child: Text(
+                                  'Animal type',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff2212121),
+                                  ),
                                 ),
-                                decoration: const InputDecoration(
-                                    labelText:
-                                        "What type of animal is he or she?",
-                                    labelStyle: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
-                                    )),
+                              ),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 45,
+                                    child: DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(),
+                                      value: selectedType,
+                                      items: types
+                                          .map((item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xff212121),
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      onChanged: (item) => setState(() {
+                                        selectedType = item!;
+                                      }),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 3, 20, 0),
+                            child: Text(
+                              "Pet's age",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff2212121),
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 3, 20, 5),
                             child: SizedBox(
-                              height: 50,
+                              height: 40,
                               child: TextField(
                                 controller: _ageEditingController,
                                 keyboardType: TextInputType.name,
@@ -281,18 +367,129 @@ class _CreatePetViewState extends State<CreatePetView> {
                                   color: Color(0xff212121),
                                 ),
                                 decoration: const InputDecoration(
-                                    labelText: "How old is he or she?",
-                                    labelStyle: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
+                                    hintText: "Age",
+                                    hintStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
                                     )),
                               ),
                             ),
                           ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                            child: Text(
+                              'Have your pet ever had diseases?',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff2212121),
+                              ),
+                            ),
+                          ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                             child: SizedBox(
-                              height: 50,
+                              height: 40,
+                              child: TextField(
+                                controller: _diseaseEditingController,
+                                keyboardType: TextInputType.multiline,
+                                maxLength: null,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xff212121),
+                                ),
+                                decoration: const InputDecoration(
+                                    labelText:
+                                        "If yes, please specify. If no, leave blank.",
+                                    labelStyle: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 3, 20, 5),
+                            child: Text(
+                              'When was the last time your pet was sick?',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff2212121),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  width: 100,
+                                  child: TextField(
+                                    controller: _lastTimeSickEditingController,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLength: null,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xff212121),
+                                    ),
+                                    decoration: const InputDecoration(
+                                        hintText: "1 month ago?",
+                                        hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 45,
+                                    child: DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(),
+                                      value: selectedDateType,
+                                      items: dateTypes
+                                          .map((item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xff212121),
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      onChanged: (item) => setState(() {
+                                        selectedDateType = item!;
+                                      }),
+                                    ),
+                                  ),
+                                ),
+                                Text('ago'),
+                              ],
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 3, 20, 5),
+                            child: Text(
+                              'Description',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff2212121),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: SizedBox(
+                              height: 40,
                               child: TextField(
                                 controller: _descriptionEditingController,
                                 keyboardType: TextInputType.multiline,
@@ -302,10 +499,10 @@ class _CreatePetViewState extends State<CreatePetView> {
                                   color: Color(0xff212121),
                                 ),
                                 decoration: const InputDecoration(
-                                    labelText: "Something about your pet",
+                                    labelText: "Write something about your pet",
                                     labelStyle: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
                                     )),
                               ),
                             ),

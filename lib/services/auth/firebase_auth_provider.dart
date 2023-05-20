@@ -41,6 +41,33 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
+  Future<AuthUser> updateUser({
+    required String email,
+    required String password,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await user.updateEmail(email);
+        await user.updatePassword(password);
+        return AuthUser.fromFirebase(user);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          throw EmailAlreadyInUseAuthException();
+        } else if (e.code == 'invalid-email') {
+          throw InvalidEmailAuthException();
+        } else {
+          throw GenericAuthException();
+        }
+      } catch (_) {
+        throw GenericAuthException();
+      }
+    } else {
+      throw UserNotLoggedInAuthException();
+    }
+  }
+
+  @override
   AuthUser? get currentUser {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
