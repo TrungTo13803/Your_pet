@@ -419,7 +419,7 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                         color: Color(0xff212121),
                                       ),
                                       decoration: const InputDecoration(
-                                          labelText: "Last time sick",
+                                          labelText: "Last time got sick",
                                           labelStyle: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w500,

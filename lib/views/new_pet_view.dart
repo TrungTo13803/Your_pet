@@ -424,7 +424,7 @@ class _CreatePetViewState extends State<CreatePetView> {
                           const Padding(
                             padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
                             child: Text(
-                              'When was the last time your pet was sick?',
+                              'When was the last time your pet got sick?',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
