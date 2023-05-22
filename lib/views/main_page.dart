@@ -63,18 +63,9 @@ class _NoteView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(homeRoute);
-                          },
-                          icon: const Icon(
-                            CupertinoIcons.arrow_left,
-                            color: Color(0xFF0f67ca),
-                          ))),
                   const Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
                       child: FittedBox(
                           child: Text(
                         'Notes',

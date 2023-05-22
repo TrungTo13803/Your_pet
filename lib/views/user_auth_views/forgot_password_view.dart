@@ -89,13 +89,29 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         child: TextButton(
                             onPressed: () async {
                               try {
+                                FocusScope.of(context).unfocus();
                                 await FirebaseAuth.instance
                                     .sendPasswordResetEmail(
                                         email: _email.text.trim());
-                                const SnackBar(
-                                  content: Text(
-                                      'Check your email for a link to reset your password'),
-                                );
+
+                                await showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: const Text('Email sent'),
+                                          content: const Text(
+                                              'Check your email to reset your password'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Ok'))
+                                          ],
+                                        ));
+
+                                await Navigator.of(context)
+                                    .pushNamedAndRemoveUntil(
+                                        loginRoute, (route) => false);
                               } on FirebaseAuthException catch (e) {
                                 SnackBar(
                                   content: Text('${e.message}'),
@@ -103,7 +119,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                               }
                             },
                             child: const Text(
-                              'Change password',
+                              'Reset password',
                               style: TextStyle(
                                   color: Color(0xff2271ff),
                                   fontSize: 14,

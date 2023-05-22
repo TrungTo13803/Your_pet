@@ -188,6 +188,20 @@ class _CreateNoteViewState extends State<CreateNoteView> {
                                               8, 12, 8, 8),
                                           child: TextButton(
                                               onPressed: () {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                if (_petNameEditingController
+                                                        .text.isEmpty ||
+                                                    _noteTitleEditingController
+                                                        .text.isEmpty ||
+                                                    _noteEditingController
+                                                        .text.isEmpty) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                          content: Text(
+                                                              'Please fill all the fields')));
+                                                  return;
+                                                }
                                                 _safeIfTapOnAddButton();
                                                 Navigator.of(context)
                                                     .pushNamed(homeRoute);

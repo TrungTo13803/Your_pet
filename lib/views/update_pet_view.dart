@@ -260,6 +260,25 @@ class _UpdatePetViewState extends State<UpdatePetView> {
                                                 onPressed: () {
                                                   FocusScope.of(context)
                                                       .unfocus();
+                                                  if (_ageEditingController.text.isEmpty ||
+                                                      _descriptionEditingController
+                                                          .text.isEmpty ||
+                                                      _nameEditingController
+                                                          .text.isEmpty ||
+                                                      _weightEditingController
+                                                          .text.isEmpty ||
+                                                      _diseaseEditingController
+                                                          .text.isEmpty ||
+                                                      _lastTimeSickEditingController
+                                                          .text.isEmpty) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    'Please fill all the fields')));
+                                                    return;
+                                                  }
                                                   _safeIfTapOnAddButton();
                                                 },
                                                 child: const Text('Save',

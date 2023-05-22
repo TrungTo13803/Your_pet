@@ -196,6 +196,18 @@ class _UpdateNoteViewState extends State<UpdateNoteView> {
                                               onPressed: () {
                                                 FocusScope.of(context)
                                                     .unfocus();
+                                                if (_petNameEditingController
+                                                        .text.isEmpty ||
+                                                    _noteTitleEditingController
+                                                        .text.isEmpty ||
+                                                    _noteEditingController
+                                                        .text.isEmpty) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(const SnackBar(
+                                                          content: Text(
+                                                              'Please fill all the fields')));
+                                                  return;
+                                                }
                                                 _safeIfTapOnAddButton();
                                               },
                                               child: const Text('Save',
